@@ -139,11 +139,11 @@ Customers frequently gawk at this number because they&amp;rsquo;ve looked at oth
     </item>
     
     <item>
-      <title>Fun with RNGs: Calculating &amp;#960;</title>
-      <link>/blog/2013/05/03/fun-with-rngs-calculating-#960/</link>
+      <title>Fun with RNGs: Calculating π</title>
+      <link>/blog/2013/05/03/fun-with-rngs-calculating-%CF%80/</link>
       <pubDate>Fri, 03 May 2013 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2013/05/03/fun-with-rngs-calculating-#960/</guid>
+      <guid>/blog/2013/05/03/fun-with-rngs-calculating-%CF%80/</guid>
       <description>So, calculating &amp;#960; is a fun pastime for people it seems. There are many ways to do it, but this one is mine. It&amp;rsquo;s 12 lines of code, it wastes a lot of electricity and it takes forever to converge.
 {% codeblock lang:csharp %} public double EstimatePi(int numberOfTrials) { var r = new Random();
 return 4 * Enumerable.Range(1, numberOfTrials) .Select(o =&amp;gt; { var x = r.NextDouble(); var y = r.NextDouble(); return Math.</description>

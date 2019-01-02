@@ -1,5 +1,5 @@
 ---
-title: "Fun with RNGs: Calculating &#960;"
+title: "Fun with RNGs: Calculating π"
 date: 2013-05-03
 comments: true
 ---
