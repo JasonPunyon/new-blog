@@ -12,7 +12,7 @@ It'd be nice if we had an automated way of dealing with this. We have no idea wh
 
 Last week while taking another whack at the problem I Googled "Text Anomaly" and came across David Guthrie's 186 page Ph. D. thesis, [Unsupervised Detection of Anomalous Text](http://nlp.shef.ac.uk/Completed_PhD_Projects/guthrie.pdf). There's a lot there, but the novel idea was simple enough (and it worked in his experiments and mine) that I'm surprised I haven't heard about it until now.
 
-###Distance to the Textual Complement
+### Distance to the Textual Complement
 
 Say you have a bunch of documents. You pull one out and want to determine how anomalous it is with respect to all the others. Here's what you do:
 
@@ -25,23 +25,23 @@ Do this for every document and sort the results descending by the distance calcu
 
 That's it. Pretty simple to understand and implement. There are two choices to make: which features, and which distance metric to use.
 
-##Obscurity of Vocabulary, I choose you!
+## Obscurity of Vocabulary, I choose you!
 
 In any machine learning problem you have to come up with features to characterize the set of things you're trying to work on. This thesis is chock full of features, 166 of them broken up into a few different categories. This part of the paper was a goldmine for me (remember, I have no idea what I'm doing). The text features I knew about before this were word counts, frequencies, tf-idf and maybe getting a little into part of speech tags. The kinds of features he talks about are stuff I never would've come up with on my own. If you're doing similar work and are similarly lost, take a look there for some good examples of feature engineering.
 
 The set of features that stood out to me the most were the ones in a section called "Obscurity of Vocabulary Usage". The idea was to look at a giant reference corpus and rank the words in the corpus descending by frequency. Then you make lists of the top 1K, 5K, 10K, 50K, etc. words. Then you characterize a document by calculating the percentages of the document's words that fall into each bucket.
 
-##Manhattan Distance, I choose you!
+## Manhattan Distance, I choose you!
 
 Guthrie pits a bunch of distance metrics against eachother and for Distance to the Textual Complement method the [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) got the blue ribbon, so I used that.
 
-#Setup
+# Setup
 
 When I've been looking through the jobs before I can pretty much tell by their titles whether they're busted or not, so my documents were just the job titles. There isn't really a good reference corpus from which to build the Top-N word lists, so I just used the job titles themselves. I tried a couple different sets of Ns but ended up on 100, 300, 1000, 3000, and 10000 (Really ~7,000 as that's the number of unique terms in all job titles).
 
 <a href="http://i.imgur.com/UxtpK5K.png"><img src="http://i.imgur.com/UxtpK5K.png" /></a>
 
-#Results
+# Results
 
 Here's the sort of all the jobs that were on the board yesterday.
 
@@ -51,7 +51,7 @@ Basically everything on the right is good and has low scores (distances).
 
 Most of the jobs on the left have something anomalous in their titles. Let's group up the anomalies by the reasons they're broken and look over some of them.
 
-####Stuff that just ain't right
+#### Stuff that just ain't right
 
 These jobs just don't belong on the board. We need to follow up with these people and issue refunds.
 
@@ -63,7 +63,7 @@ These jobs just don't belong on the board. We need to follow up with these peopl
 1. NA Customer Service Representative for Sungard Energy
 1. Manager, Curation
 
-####Just Terrible Titles
+#### Just Terrible Titles
 
 These jobs would belong, but the titles chosen were pretty bad. Misspellings, too many abbreviations, etc. We need to follow up with our customers about these titles to improve them.
 
@@ -71,13 +71,11 @@ These jobs would belong, but the titles chosen were pretty bad. Misspellings, to
 1. Sr Sys Admin Tech Oper Aux Svcs
 1. VR/AR Developer
 
-####Duplicate Information
+#### Duplicate Information
 
 ![Duplicate Information](http://i.imgur.com/lUUTeNX.png)
 
 Anywhere you see the title for a job on [Stack Overflow](http://stackoverflow.com) or [Careers](http://careers.stackoverflow.com) we also show you things like the location of the job, whether it's remote or not, and the company's name. These titles duplicate that information. We need to follow up with our customers to improve them.
-
-
 
 1. Delivery Manager, Trade Me, New Zealand
 1. Visualization Developer, Calgary
@@ -91,7 +89,7 @@ Anywhere you see the title for a job on [Stack Overflow](http://stackoverflow.co
 1. Chief Information Officer/CIO Audible.com
 1. Machine Learning Engineer Part Time Remote Working Available
 
-##What about the false positives?
+## What about the false positives?
 
 A number of false positives are produced (this is just a sample):
 
