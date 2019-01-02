@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Stack Exchange on A Hugo website</title>
+    <link>/categories/stack-exchange/</link>
+    <description>Recent content in Stack Exchange on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 Sep 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/stack-exchange/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Commuting: A Perverse Incentive at Stack Exchange</title>
+      <link>/blog/2013/09/18/commuting-a-perverse-incentive-at-stack-exchange/</link>
+      <pubDate>Wed, 18 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2013/09/18/commuting-a-perverse-incentive-at-stack-exchange/</guid>
+      <description>So, we just went through comp review season here at the Stack Exchange. This is pretty much the only time of year we talk about money, because that&amp;rsquo;s the way we want it. We pay people enough to be happy and then shut up about it. You&amp;rsquo;ll probably only ever hear stuff about comp from me around September each year because that&amp;rsquo;s the only time it&amp;rsquo;s on my mind. The system works, and I&amp;rsquo;m generally happy about my financial situation, but we have a comp policy about remote work that subjects me to a bit of a perverse incentive when it comes to commuting.</description>
+    </item>
+    
+    <item>
+      <title>Rock Stars Went Where?</title>
+      <link>/blog/2012/07/15/rock-stars-went-where/</link>
+      <pubDate>Sun, 15 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/07/15/rock-stars-went-where/</guid>
+      <description>So I read this article today about how the tech industry is too elitist and thinks everyone who&amp;rsquo;s good is already rich and can follow their bliss until the cows come home waiting for the olympian software companies of the world to come hire them. I just wanted to provide a data point from Stack Exchange. I&amp;rsquo;m not gonna bloviate that we&amp;rsquo;re all rock stars at Stack Exchange (I wouldn&amp;rsquo;t even describe myself like that) but here&amp;rsquo;s the list of schools attended by all the programmers and sysadmins at Stack Exchange:</description>
+    </item>
+    
+    <item>
+      <title>How I Got My Dream Job at Stack Exchange</title>
+      <link>/blog/2012/05/15/how-i-got-my-dream-job-at-stack-exchange/</link>
+      <pubDate>Tue, 15 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/15/how-i-got-my-dream-job-at-stack-exchange/</guid>
+      <description>Matt recently wrote his story about how he got his job at Stack Exchange and I thought it was such a good idea that I&amp;rsquo;d go ahead and write my own. This is my long rambling account of my path to my dream job.
+Getting bit by the bug I was a physics major. I spent the summers of my college years at the 88&amp;rdquo; Cyclotron at UC Berkeley helping in the preparation, execution and analysis of medium energy nuclear physics experiments.</description>
+    </item>
+    
+  </channel>
+</rss>

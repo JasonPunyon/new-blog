@@ -1,0 +1,56 @@
+---
+title: "Random Projection: Look Ma, No Matrix!"
+date: 2019-01-01 17:07:08 -0500
+---
+
+`r blogdown::shortcode("figure", src="/hello.img", class="right")`
+
+Random projection is pretty great, but one of the drawbacks is the random matrix itself. If the high dimensional space has 10,000,000 dimensions and the low dimensional space has 1,000 dimensions then the random matrix has 10 billion entries. That's a 37GB matrix.
+
+Why is this good
+
+- No memory for the matrix.
+- No memory means no cache effects to worry about.
+- With no cache effects to worry about matrix multiplication is embarrassingly parallel.
+
+Here.
+
+```csharp
+public sealed class RandomMatrix
+{
+    public readonly uint Seed;
+    private readonly ulong Salt;
+    public RandomMatrix(uint seed)
+    {
+        Seed = seed;
+        Salt = ((ulong)Seed) << 32;
+    }
+
+    public int this[uint row, uint col]
+    {
+        get
+        {
+            var x = Salt | col;
+            x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+            x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+            x = x ^ (x >> 31);
+            x = x << 32 | row;
+            x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+            x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+            x = x ^ (x >> 31);
+            return -1 + ((int)(x & 1) * 2);
+        }
+    }
+}
+
+public class ThisIsSomeMoreCode
+{
+    public int YUPYUP
+}
+```
+
+When the entries of a matrix are random we can delay the computation of the numbers to retrieval time.
+
+There are methods 
+
+Make a change.

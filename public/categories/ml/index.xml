@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ml on A Hugo website</title>
+    <link>/categories/ml/</link>
+    <description>Recent content in Ml on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Sep 2014 16:50:47 -0400</lastBuildDate>
+    
+	<atom:link href="/categories/ml/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Wild Anomaly Appears! Part 2: The Anomaling</title>
+      <link>/blog/2014/09/05/a-wild-anomaly-appears-part-2-the-anomaling/</link>
+      <pubDate>Fri, 05 Sep 2014 16:50:47 -0400</pubDate>
+      
+      <guid>/blog/2014/09/05/a-wild-anomaly-appears-part-2-the-anomaling/</guid>
+      <description>After all the rave reviews of my last post I knew you were just on the edge of your seat waiting to hear more about my little unsupervised text anomaly detector.
+  
+So, we&amp;rsquo;ve got some working ML! Our job&amp;rsquo;s done right?
+
+&amp;lsquo;Round these parts, it ain&amp;rsquo;t shipped &amp;lsquo;til it&amp;rsquo;s fast and it&amp;rsquo;s got it&amp;rsquo;s own chat bot. We spend all day in chat and there&amp;rsquo;s a cast of characters we&amp;rsquo;ve come to know, and love, and hate.</description>
+    </item>
+    
+    <item>
+      <title>A wild anomaly appears!</title>
+      <link>/blog/2014/09/02/a-wild-anomaly-appears/</link>
+      <pubDate>Tue, 02 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2014/09/02/a-wild-anomaly-appears/</guid>
+      <description>So, I&amp;rsquo;m working on the new Data Team at Stack Exchange now. Truth is we have no idea what we&amp;rsquo;re doing (WANNA JOIN US?). But every now and then we come across something that works a little too well and wonder why we haven&amp;rsquo;t heard about it before.
+We run a niche job board for programmers that has about 2900 jobs on it this morning. Quality has been pretty easy to maintain.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Recruiters on A Hugo website</title>
+    <link>/categories/recruiters/</link>
+    <description>Recent content in Recruiters on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 Jun 2012 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/recruiters/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Don&#39;t Be Represented by Contingency Recruiters</title>
+      <link>/blog/2012/06/22/dont-be-represented-by-contingency-recruiters/</link>
+      <pubDate>Fri, 22 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/06/22/dont-be-represented-by-contingency-recruiters/</guid>
+      <description>Before I faded a crazy counter offer and got my dream job I worked in finance. I was going on interviews in 2009 having been laid off from my second job after the 2008 collapse. This was back in the days when I was still using contingency recruiters to find jobs. They&amp;rsquo;re a natural fit for finding finance jobs because banks and hedge funds have money they&amp;rsquo;re willing to spend on recruiters when they aren&amp;rsquo;t swimming in it (artists rendering on the right), or spinning it into thread for their golden parachute side business.</description>
+    </item>
+    
+  </channel>
+</rss>

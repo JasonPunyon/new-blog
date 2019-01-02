@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jason Punyon</title>
+    <link>/</link>
+    <description>Recent content on Jason Punyon</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Jan 2019 17:07:08 -0500</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Random Projection: Look Ma, No Matrix!</title>
+      <link>/blog/2019/01/01/random-projection-look-ma-no-matrix/</link>
+      <pubDate>Tue, 01 Jan 2019 17:07:08 -0500</pubDate>
+      
+      <guid>/blog/2019/01/01/random-projection-look-ma-no-matrix/</guid>
+      <description>Random projection is pretty great, but one of the drawbacks is the random matrix itself. If the high dimensional space has 10,000,000 dimensions and the low dimensional space has 1,000 dimensions then the random matrix has 10 billion entries. That’s a 37GB matrix.
+Why is this good
+ No memory for the matrix. No memory means no cache effects to worry about. With no cache effects to worry about matrix multiplication is embarrassingly parallel.</description>
+    </item>
+    
+    <item>
+      <title>Gratitude</title>
+      <link>/blog/2018/01/24/gratitude/</link>
+      <pubDate>Wed, 24 Jan 2018 00:37:24 -0500</pubDate>
+      
+      <guid>/blog/2018/01/24/gratitude/</guid>
+      <description>I’ve been meditating lately. I started in December, and I haven’t done it every day, but I enjoy it. The topic of this morning’s meditation was gratitude. It led me through feeling grateful for different things. Something someone did for me. Something someone I don’t know did. Something from nature. Something I did. Something small. Something big.
+My task for the week was to deploy an A/B test of a new job recommendation algorithm.</description>
+    </item>
+    
+    <item>
+      <title>Fun With Random Numbers: More Random Projection</title>
+      <link>/blog/2017/12/08/fun-with-random-numbers-more-random-projection/</link>
+      <pubDate>Fri, 08 Dec 2017 13:51:52 -0500</pubDate>
+      
+      <guid>/blog/2017/12/08/fun-with-random-numbers-more-random-projection/</guid>
+      <description>Last time we learned about a method of dimensionality reduction called random projection. We showed that using random projection, the number of dimensions required to preserve the distance between the points in a set is dependent only upon the number of points in the set and the maximum acceptable distortion set by the user. Surprisingly it does not depend on the original number of dimensions. The proof that random projections work is hard to understand, but the method is very simple to implement in just a few steps.</description>
+    </item>
+    
+    <item>
+      <title>Fun With Random Numbers: Random Projection</title>
+      <link>/blog/2017/12/02/fun-with-random-numbers-random-projection/</link>
+      <pubDate>Sat, 02 Dec 2017 12:25:46 -0500</pubDate>
+      
+      <guid>/blog/2017/12/02/fun-with-random-numbers-random-projection/</guid>
+      <description>So, there’s this bit of math called the Johnson-Lindenstrauss lemma. It makes a fairly fantastic claim. Here it is in math-speak from the original paper…
+{% img https://i.imgur.com/5vExomX.png %}
+Fantastic, right? What does it mean in slightly more lay speak?
+The Fantastic Claim Let’s say you have a set of 1000 points in a 10,000 dimensional space. These points could be the brightness of pixels from 100x100 grayscale images. Or maybe they’re the term counts of the 10,000 most frequent terms in a document from a corpus of documents.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      
+      <guid>/about/</guid>
+      <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
+    </item>
+    
+    <item>
+      <title>Providence: Failure Is Always An Option</title>
+      <link>/blog/2015/02/12/providence-failure-is-always-an-option/</link>
+      <pubDate>Thu, 12 Feb 2015 15:42:38 -0500</pubDate>
+      
+      <guid>/blog/2015/02/12/providence-failure-is-always-an-option/</guid>
+      <description>This post is part of a series on the Providence project at Stack Exchange. The first post can be found here.
+The last five blog posts have been a highlight reel of Providence’s successes. Don’t be fooled, though, the road to Providence was long and winding. Let’s balance out the highlight reel with a look at some of the bumps in the road.
+I said the road was long. Let’s quantify that.</description>
+    </item>
+    
+    <item>
+      <title>Providence: Architecture and Performance</title>
+      <link>/blog/2015/02/10/providence-architecture-and-performance/</link>
+      <pubDate>Tue, 10 Feb 2015 11:05:50 -0500</pubDate>
+      
+      <guid>/blog/2015/02/10/providence-architecture-and-performance/</guid>
+      <description>This post is part of a series on the Providence project at Stack Exchange. The first post can be found here.
+We’ve talked about how we’re trying to understand our users better at Stack Exchange and seen just how big an impact it’s had on our pilot project, the Careers Job Ads. Let’s take a look at the architecture of the system.
+{% img center http://i.imgur.com/2zw1TjG.png %}
+##Hardware
+This is the easy part, so let’s just get it out of the way.</description>
+    </item>
+    
+    <item>
+      <title>Providence: Testing and Results</title>
+      <link>/blog/2015/02/05/providence-testing-and-results/</link>
+      <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2015/02/05/providence-testing-and-results/</guid>
+      <description>This post is part of a series on the Providence project at Stack Exchange. The first post can be found here.
+The Providence project was motivated by our desire to better understand our users at Stack Exchange. So we think we’ve figured out what kind of developers come to our sites, and what technologies they’re using. Then we figured out a way to combine all our features into the Value Function.</description>
+    </item>
+    
+    <item>
+      <title>A Wild Anomaly Appears! Part 2: The Anomaling</title>
+      <link>/blog/2014/09/05/a-wild-anomaly-appears-part-2-the-anomaling/</link>
+      <pubDate>Fri, 05 Sep 2014 16:50:47 -0400</pubDate>
+      
+      <guid>/blog/2014/09/05/a-wild-anomaly-appears-part-2-the-anomaling/</guid>
+      <description>After all the rave reviews of my last post I knew you were just on the edge of your seat waiting to hear more about my little unsupervised text anomaly detector.
+  
+So, we&amp;rsquo;ve got some working ML! Our job&amp;rsquo;s done right?
+
+&amp;lsquo;Round these parts, it ain&amp;rsquo;t shipped &amp;lsquo;til it&amp;rsquo;s fast and it&amp;rsquo;s got it&amp;rsquo;s own chat bot. We spend all day in chat and there&amp;rsquo;s a cast of characters we&amp;rsquo;ve come to know, and love, and hate.</description>
+    </item>
+    
+    <item>
+      <title>A wild anomaly appears!</title>
+      <link>/blog/2014/09/02/a-wild-anomaly-appears/</link>
+      <pubDate>Tue, 02 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2014/09/02/a-wild-anomaly-appears/</guid>
+      <description>So, I&amp;rsquo;m working on the new Data Team at Stack Exchange now. Truth is we have no idea what we&amp;rsquo;re doing (WANNA JOIN US?). But every now and then we come across something that works a little too well and wonder why we haven&amp;rsquo;t heard about it before.
+We run a niche job board for programmers that has about 2900 jobs on it this morning. Quality has been pretty easy to maintain.</description>
+    </item>
+    
+    <item>
+      <title>So you want a zillion developers&amp;hellip;</title>
+      <link>/blog/2013/12/26/so-you-want-a-zillion-developershellip/</link>
+      <pubDate>Thu, 26 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2013/12/26/so-you-want-a-zillion-developershellip/</guid>
+      <description>I work at Stack Overflow on Careers 2.0. In addition to our job board we have a candidate database where you can search for developers to hire. Our candidate database has 124K+ developers in it right now.
+Customers frequently gawk at this number because they&amp;rsquo;ve looked at other products in the dev hiring space that offer millions of candidates in their databases. Sourcing.io claims to have &amp;ldquo;over 4 million developers&amp;rdquo; in their database.</description>
+    </item>
+    
+    <item>
+      <title>Commuting: A Perverse Incentive at Stack Exchange</title>
+      <link>/blog/2013/09/18/commuting-a-perverse-incentive-at-stack-exchange/</link>
+      <pubDate>Wed, 18 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2013/09/18/commuting-a-perverse-incentive-at-stack-exchange/</guid>
+      <description>So, we just went through comp review season here at the Stack Exchange. This is pretty much the only time of year we talk about money, because that&amp;rsquo;s the way we want it. We pay people enough to be happy and then shut up about it. You&amp;rsquo;ll probably only ever hear stuff about comp from me around September each year because that&amp;rsquo;s the only time it&amp;rsquo;s on my mind. The system works, and I&amp;rsquo;m generally happy about my financial situation, but we have a comp policy about remote work that subjects me to a bit of a perverse incentive when it comes to commuting.</description>
+    </item>
+    
+    <item>
+      <title>Fun with RNGs: Calculating &amp;#960;</title>
+      <link>/blog/2013/05/03/fun-with-rngs-calculating-#960/</link>
+      <pubDate>Fri, 03 May 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2013/05/03/fun-with-rngs-calculating-#960/</guid>
+      <description>So, calculating &amp;#960; is a fun pastime for people it seems. There are many ways to do it, but this one is mine. It&amp;rsquo;s 12 lines of code, it wastes a lot of electricity and it takes forever to converge.
+{% codeblock lang:csharp %} public double EstimatePi(int numberOfTrials) { var r = new Random();
+return 4 * Enumerable.Range(1, numberOfTrials) .Select(o =&amp;gt; { var x = r.NextDouble(); var y = r.NextDouble(); return Math.</description>
+    </item>
+    
+    <item>
+      <title>Geography&#39;s The Fuck.</title>
+      <link>/blog/2013/01/20/geographys-the-fuck./</link>
+      <pubDate>Sun, 20 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2013/01/20/geographys-the-fuck./</guid>
+      <description>Raganwald poses an interesting question. Why do some of the best minds in our industry spend time figuring out how to make people click more on ads? Aren&amp;rsquo;t there more interesting problems for these bright up-and-comers to spend their valuable time and insight on?
+One simple answer to the question is Geography.
+How do you know this? I&amp;rsquo;ve spent a little time figuring out how to make people click more on ads :)</description>
+    </item>
+    
+    <item>
+      <title>A Guy Walks Into An Apple Store...</title>
+      <link>/blog/2013/01/11/a-guy-walks-into-an-apple-store.../</link>
+      <pubDate>Fri, 11 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2013/01/11/a-guy-walks-into-an-apple-store.../</guid>
+      <description>So me and my wife had a babby recently. Unfortunately my wife had some preterm labor around week 33 and we had to spend about 10 days in the hospital. Don&amp;rsquo;t worry, everything turned out all right (see perfection below), but I was pretty burnt out after the 10 days in the hospital. My wife was happy with my performance during our mini-crisis and she told me to go indulge a little.</description>
+    </item>
+    
+    <item>
+      <title>Rock Stars Went Where?</title>
+      <link>/blog/2012/07/15/rock-stars-went-where/</link>
+      <pubDate>Sun, 15 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/07/15/rock-stars-went-where/</guid>
+      <description>So I read this article today about how the tech industry is too elitist and thinks everyone who&amp;rsquo;s good is already rich and can follow their bliss until the cows come home waiting for the olympian software companies of the world to come hire them. I just wanted to provide a data point from Stack Exchange. I&amp;rsquo;m not gonna bloviate that we&amp;rsquo;re all rock stars at Stack Exchange (I wouldn&amp;rsquo;t even describe myself like that) but here&amp;rsquo;s the list of schools attended by all the programmers and sysadmins at Stack Exchange:</description>
+    </item>
+    
+    <item>
+      <title>Don&#39;t Be Represented by Contingency Recruiters</title>
+      <link>/blog/2012/06/22/dont-be-represented-by-contingency-recruiters/</link>
+      <pubDate>Fri, 22 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/06/22/dont-be-represented-by-contingency-recruiters/</guid>
+      <description>Before I faded a crazy counter offer and got my dream job I worked in finance. I was going on interviews in 2009 having been laid off from my second job after the 2008 collapse. This was back in the days when I was still using contingency recruiters to find jobs. They&amp;rsquo;re a natural fit for finding finance jobs because banks and hedge funds have money they&amp;rsquo;re willing to spend on recruiters when they aren&amp;rsquo;t swimming in it (artists rendering on the right), or spinning it into thread for their golden parachute side business.</description>
+    </item>
+    
+    <item>
+      <title>On Counter Offers</title>
+      <link>/blog/2012/05/17/on-counter-offers/</link>
+      <pubDate>Thu, 17 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/17/on-counter-offers/</guid>
+      <description>Last I left you, dear readers, I had just been given an offer to work my dream job at Stack Exchange by Joel. I accepted the offer on the spot, and went home walking on air. What do you do when you get the offer for your dream job? You go home, crack open a bottle of wine and write your resignation letter.
+Achieving a dream is really liberating. I&amp;rsquo;d written a resignation letter before, but it wasn&amp;rsquo;t like this.</description>
+    </item>
+    
+    <item>
+      <title>How I Got My Dream Job at Stack Exchange</title>
+      <link>/blog/2012/05/15/how-i-got-my-dream-job-at-stack-exchange/</link>
+      <pubDate>Tue, 15 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/15/how-i-got-my-dream-job-at-stack-exchange/</guid>
+      <description>Matt recently wrote his story about how he got his job at Stack Exchange and I thought it was such a good idea that I&amp;rsquo;d go ahead and write my own. This is my long rambling account of my path to my dream job.
+Getting bit by the bug I was a physics major. I spent the summers of my college years at the 88&amp;rdquo; Cyclotron at UC Berkeley helping in the preparation, execution and analysis of medium energy nuclear physics experiments.</description>
+    </item>
+    
+    <item>
+      <title>Employee Referral Bonuses Are Pants on Head Stupid: Follow Up</title>
+      <link>/blog/2012/05/12/employee-referral-bonuses-are-pants-on-head-stupid-follow-up/</link>
+      <pubDate>Sat, 12 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/12/employee-referral-bonuses-are-pants-on-head-stupid-follow-up/</guid>
+      <description>In my previous post I outlined one reason why I think employee referral bonuses aren&amp;rsquo;t good: They distort the incentives for referring someone into the company in a way that can&amp;rsquo;t possibly be good. First off, my thanks go out to everyone who read that post. Some people refuted my argument in various ways and I thought I&amp;rsquo;d take a look at a couple of them.
+Refutation The First: Bonus Size Matters This is correct.</description>
+    </item>
+    
+    <item>
+      <title>Employee Referral Bonuses Are Pants On Head Stupid</title>
+      <link>/blog/2012/05/11/employee-referral-bonuses-are-pants-on-head-stupid/</link>
+      <pubDate>Fri, 11 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/11/employee-referral-bonuses-are-pants-on-head-stupid/</guid>
+      <description>So, I read this story yesterday about the employee who referred a friend and got screwed out of his referral bonus. People on Hacker News argued about &amp;ldquo;Name and Shame&amp;rdquo; and who was right and wrong but the first thought that popped into my head was &amp;ldquo;employee referral bonuses are pants on head stupid.&amp;rdquo;
+Forget about this particular case and the collateral problems it&amp;rsquo;s causing. The employee referral bonus is just an intrinsically bad idea.</description>
+    </item>
+    
+  </channel>
+</rss>

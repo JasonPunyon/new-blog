@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hiring on A Hugo website</title>
+    <link>/categories/hiring/</link>
+    <description>Recent content in Hiring on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 15 Jul 2012 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/hiring/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Rock Stars Went Where?</title>
+      <link>/blog/2012/07/15/rock-stars-went-where/</link>
+      <pubDate>Sun, 15 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/07/15/rock-stars-went-where/</guid>
+      <description>So I read this article today about how the tech industry is too elitist and thinks everyone who&amp;rsquo;s good is already rich and can follow their bliss until the cows come home waiting for the olympian software companies of the world to come hire them. I just wanted to provide a data point from Stack Exchange. I&amp;rsquo;m not gonna bloviate that we&amp;rsquo;re all rock stars at Stack Exchange (I wouldn&amp;rsquo;t even describe myself like that) but here&amp;rsquo;s the list of schools attended by all the programmers and sysadmins at Stack Exchange:</description>
+    </item>
+    
+    <item>
+      <title>Employee Referral Bonuses Are Pants on Head Stupid: Follow Up</title>
+      <link>/blog/2012/05/12/employee-referral-bonuses-are-pants-on-head-stupid-follow-up/</link>
+      <pubDate>Sat, 12 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/12/employee-referral-bonuses-are-pants-on-head-stupid-follow-up/</guid>
+      <description>In my previous post I outlined one reason why I think employee referral bonuses aren&amp;rsquo;t good: They distort the incentives for referring someone into the company in a way that can&amp;rsquo;t possibly be good. First off, my thanks go out to everyone who read that post. Some people refuted my argument in various ways and I thought I&amp;rsquo;d take a look at a couple of them.
+Refutation The First: Bonus Size Matters This is correct.</description>
+    </item>
+    
+    <item>
+      <title>Employee Referral Bonuses Are Pants On Head Stupid</title>
+      <link>/blog/2012/05/11/employee-referral-bonuses-are-pants-on-head-stupid/</link>
+      <pubDate>Fri, 11 May 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2012/05/11/employee-referral-bonuses-are-pants-on-head-stupid/</guid>
+      <description>So, I read this story yesterday about the employee who referred a friend and got screwed out of his referral bonus. People on Hacker News argued about &amp;ldquo;Name and Shame&amp;rdquo; and who was right and wrong but the first thought that popped into my head was &amp;ldquo;employee referral bonuses are pants on head stupid.&amp;rdquo;
+Forget about this particular case and the collateral problems it&amp;rsquo;s causing. The employee referral bonus is just an intrinsically bad idea.</description>
+    </item>
+    
+  </channel>
+</rss>
