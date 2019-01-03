@@ -1,0 +1,56 @@
+#sidebar ul.sidebar-buttons li.sidebar-button .sidebar-button-link {
+    color: #8a8a8a
+}
+
+#sidebar ul.sidebar-buttons li.sidebar-button .sidebar-button-link :hover {
+    color: #8a8a8a
+}
+
+#sidebar ul.sidebar-buttons li.sidebar-button .sidebar-button-link:active, #sidebar ul.sidebar-buttons li.sidebar-button .sidebar-button-link:hover {
+    color: #8a8a8a;
+}
+
+@media only screen and (min-width: 1280px) {
+    #sidebar[data-behavior="3"] {
+        width: 100px;
+    }
+
+    #sidebar[data-behavior="3"] .sidebar-profile .sidebar-profile-picture {
+        height: 64px;
+        width: 64px;
+    }
+
+    #sidebar[data-behavior="3"] ul.sidebar-buttons li.sidebar-button .sidebar-button-link .sidebar-button-icon {
+        font-size: 2.5rem;
+    }
+}
+
+@media only screen and (max-width: 1279px) and (min-width: 1024px) {
+    #sidebar[data-behavior="3"] {
+        width: 100px;
+    }
+
+    #sidebar[data-behavior="3"] .sidebar-profile .sidebar-profile-picture {
+        height: 64px;
+        width: 64px;
+    }
+
+    #sidebar[data-behavior="3"] ul.sidebar-buttons li.sidebar-button .sidebar-button-link .sidebar-button-icon {
+        font-size: 2.5rem;
+    }
+}
+
+@media only screen and (max-width: 1023px) and (min-width: 768px) {
+    #sidebar[data-behavior="3"] {
+        width: 100px;
+    }
+
+    #sidebar[data-behavior="3"] .sidebar-profile .sidebar-profile-picture {
+        height: 64px;
+        width: 64px;
+    }
+
+    #sidebar[data-behavior="3"] ul.sidebar-buttons li.sidebar-button .sidebar-button-link .sidebar-button-icon {
+        font-size: 2.5rem;
+    }
+}
