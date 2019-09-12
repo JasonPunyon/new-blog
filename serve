@@ -1,3 +1,4 @@
 #/bin/bash
 
 rscript -e 'Sys.setenv(RSTUDIO_PANDOC="/Applications/RStudio.app/Contents/MacOS/pandoc");blogdown::serve_site()'
+
