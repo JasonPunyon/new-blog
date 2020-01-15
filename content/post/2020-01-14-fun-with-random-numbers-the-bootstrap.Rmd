@@ -1,0 +1,115 @@
+---
+title: 'Fun with Random Numbers: The Bootstrap'
+author: ~
+date: '2020-01-14'
+slug: fun-with-random-numbers-the-bootstrap
+categories: []
+tags: []
+keywords:
+  - tech
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(cache = FALSE, warning = FALSE, message = FALSE, 
+                      dpi = 180, cache.lazy = FALSE,
+                      fig.cap = "")
+```
+
+Let's play a guessing game. I'm going to choose a big set of numbers. Like a billion jillion numbers. 
+
+```{r} 
+mean = floor(runif(1) * 10000 + 10) #SECRETS
+standard_deviation = floor(runif(1) * 30 + 10) #MORE SECRETS
+population = rnorm(10000000, mean, standard_deviation) #OK fine it'll be 10 million instead of a billion jillion.
+```
+
+My set of numbers has an average that you're trying to guess.
+
+```{r}
+population_mean = mean(population)
+```
+
+You get some numbers, let's say 100, from my set.
+
+```{r}
+sample_size = 100
+sample = sample(population, sample_size)
+```
+
+And now you guess. If you get it right you win! If not I win. Loser goes to the bad place.
+
+Easy game, right?
+
+## NO FAIR
+
+This game isn't very fair right now. Getting only a single guess makes this game pretty impossible for you. (OK fine, maybe I won't send you to the bad place if you lose). The chance that your 100 numbers average out to the average of my jillion billion numbers exactly is pretty low.
+
+I'm a good sport kinda guy though, so I'll make you a deal. Instead of guessing a single number, you get to guess a range. If my average is inside your range, then you win!
+
+Well...now the game is unfair in your favor. You can pick the whole number line as your range right? Then you'd always win (really glad I'm dropping the whole bad place thing).
+
+You're a good sport kinda person though, so you're gonna make me a deal. We'll play the game over and over again and keep score. If you win 95% of the time, you win. If you win 96% of the time you lose. If you win 94% of the time, or any other percent of the time besides 95% you lose.
+
+## What the f?
+
+Quite the game isn't it?
+
+## The Bootstrap?
+
+"The" Bootstrap is a technique you can use to win this game. "The" is in scare quotes there because there are a number of related techniques, this is the simplest one. The first step is taking a "bootstrap sample". To do this you sample 100 (or whatever the original `sample_size` was) elements from your sample *with replacement*. Sampling from your sample is why The Bootstrap is called a resampling method.
+
+```{r}
+take_a_bootstrap_sample = function() {
+  sample(sample, sample_size, replace = TRUE) #sample in yo sample so you can sample from yo sample
+}
+```
+
+The second step is to calculate the statistic of interest (in this case, the mean) on your bootstrap sample.
+
+```{r}
+calculate_bootstrap_statistic = function() {
+  mean(take_a_bootstrap_sample())
+}
+```
+
+You do steps 1 and 2 a lot. Like 10000 times, and put all the statistics together...
+
+```{r}
+bootstrap_statistics = tibble(Id = 1:10000) %>%
+  mutate(BootstrapStatistic = map(Id, ~ calculate_bootstrap_statistic())) %>%
+  unnest()
+```
+
+Step three is to find the range that contains the middle 95% of your bootstrap statistics. This range is your final guess.
+
+```{r}
+conf_low = quantile(bootstrap_statistics$BootstrapStatistic, .025, names = FALSE)
+conf_high = quantile(bootstrap_statistics$BootstrapStatistic, .975, names = FALSE) 
+```
+ 
+So in this run your guess is that `population_mean` is between `r round(conf_low, 1)` and `r round(conf_high)`
+
+In this case `population_mean` = `r round(population_mean, 1)`, you `r ifelse(population_mean > conf_low & population_mean < conf_high, "WIN, YAY!", "LOSE! aww :(")`
+
+# But...
+
+But your deal was that we play over and over again. Let's play 1000 times. I'll choose different numbers for each game. You should win about 95% of these. (Looks different here cause I'm doing it in a one liner, but it's the same method)
+
+```{r}
+tibble(GameId = 1:1000) %>%
+  mutate(PopulationMean = map(GameId, ~ floor(runif(1) * 10000 + 10)),
+         PopulationStandardDeviation = map(GameId, ~ floor(runif(1) * 30 + 10))) %>% # Choose Population Parameters
+  mutate(Sample = map2(PopulationMean, PopulationStandardDeviation, ~ rnorm(sample_size, .x, .y))) %>% # Sample The Population
+  mutate(BootstrapStatistics = map(Sample, ~ sapply(1:10000, function(x) mean(sample(.x, sample_size, replace=TRUE))))) %>% # Bootstrap Steps One and Two
+  mutate(ConfLow = map(BootstrapStatistics, ~ quantile(.x, .025))) %>% # Bootstrap Step Three
+  mutate(ConfHigh = map(BootstrapStatistics, ~ quantile(.x, .975))) %>% # Bootstrap Step Three
+  select(GameId, ConfLow, ConfHigh, PopulationMean) %>% # Just select what we're interested in.
+  unnest() %>%
+  mutate(YouWin = PopulationMean > ConfLow & PopulationMean < ConfHigh) %>% # Did you win?
+  count(YouWin) %>% # Count the wins
+  mutate(Percent = n / sum(n)) %>% # Calculate the percentage
+  filter(YouWin)
+```
+
+Close enough :)
