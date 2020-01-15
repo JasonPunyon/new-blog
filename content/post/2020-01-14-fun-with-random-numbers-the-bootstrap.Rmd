@@ -94,19 +94,35 @@ In this case `population_mean` = `r round(population_mean, 1)`, you `r ifelse(po
 
 # But...
 
-But your deal was that we play over and over again. Let's play 1000 times. I'll choose different numbers for each game. You should win about 95% of these. (Looks different here cause I'm doing it in a one liner, but it's the same method)
+But your deal was that we play over and over again. Let's play 1000 times. I'll choose different numbers for each game. You should win about 95% of these.
+
+First let's make a helper function that plays the game and returns the results...
+
+```{r}
+play_game = function() {
+  # I choose some numbers.
+  population = rnorm(1000, runif(1) * 10000 + 10, runif(1) * 10 + 10)
+  
+  # You get a sample.
+  s = sample(population, sample_size)
+  
+  # You do Bootstrap Step One And Two
+  bootstrap_statistics = sapply(1:10000, function(x) mean(sample(s, sample_size, replace = TRUE)))
+  
+  # Then step three, and we check whether you win...
+  tibble(ConfLow = quantile(bootstrap_statistics, .025),
+         ConfHigh = quantile(bootstrap_statistics, .975),
+         PopulationMean = mean(population)) %>%
+    mutate(YouWin = ConfLow < PopulationMean & ConfHigh > PopulationMean)
+}
+```
+
+And we'll play 1000 times...
 
 ```{r}
 tibble(GameId = 1:1000) %>%
-  mutate(PopulationMean = map(GameId, ~ floor(runif(1) * 10000 + 10)),
-         PopulationStandardDeviation = map(GameId, ~ floor(runif(1) * 30 + 10))) %>% # Choose Population Parameters
-  mutate(Sample = map2(PopulationMean, PopulationStandardDeviation, ~ rnorm(sample_size, .x, .y))) %>% # Sample The Population
-  mutate(BootstrapStatistics = map(Sample, ~ sapply(1:10000, function(x) mean(sample(.x, sample_size, replace=TRUE))))) %>% # Bootstrap Steps One and Two
-  mutate(ConfLow = map(BootstrapStatistics, ~ quantile(.x, .025))) %>% # Bootstrap Step Three
-  mutate(ConfHigh = map(BootstrapStatistics, ~ quantile(.x, .975))) %>% # Bootstrap Step Three
-  select(GameId, ConfLow, ConfHigh, PopulationMean) %>% # Just select what we're interested in.
+  mutate(Game = map(GameId, ~ play_game())) %>%
   unnest() %>%
-  mutate(YouWin = PopulationMean > ConfLow & PopulationMean < ConfHigh) %>% # Did you win?
   count(YouWin) %>% # Count the wins
   mutate(Percent = n / sum(n)) %>% # Calculate the percentage
   filter(YouWin)

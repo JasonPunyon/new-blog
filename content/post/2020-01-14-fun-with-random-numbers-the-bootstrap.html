@@ -50,28 +50,39 @@ sample = sample(population, sample_size)</code></pre>
 <p>Step three is to find the range that contains the middle 95% of your bootstrap statistics. This range is your final guess.</p>
 <pre class="r"><code>conf_low = quantile(bootstrap_statistics$BootstrapStatistic, .025, names = FALSE)
 conf_high = quantile(bootstrap_statistics$BootstrapStatistic, .975, names = FALSE) </code></pre>
-<p>So in this run your guess is that <code>population_mean</code> is between 4758.3 and 4772</p>
-<p>In this case <code>population_mean</code> = 4764, you WIN, YAY!</p>
+<p>So in this run your guess is that <code>population_mean</code> is between 6502.2 and 6510</p>
+<p>In this case <code>population_mean</code> = 6506, you WIN, YAY!</p>
 </div>
 <div id="but" class="section level1">
 <h1>But…</h1>
-<p>But your deal was that we play over and over again. Let’s play 1000 times. I’ll choose different numbers for each game. You should win about 95% of these. (Looks different here cause I’m doing it in a one liner, but it’s the same method)</p>
+<p>But your deal was that we play over and over again. Let’s play 1000 times. I’ll choose different numbers for each game. You should win about 95% of these.</p>
+<p>First let’s make a helper function that plays the game and returns the results…</p>
+<pre class="r"><code>play_game = function() {
+  # I choose some numbers.
+  population = rnorm(1000, runif(1) * 10000 + 10, runif(1) * 10 + 10)
+  
+  # You get a sample.
+  s = sample(population, sample_size)
+  
+  # You do Bootstrap Step One And Two
+  bootstrap_statistics = sapply(1:10000, function(x) mean(sample(s, sample_size, replace = TRUE)))
+  
+  # Then step three, and we check whether you win...
+  tibble(ConfLow = quantile(bootstrap_statistics, .025),
+         ConfHigh = quantile(bootstrap_statistics, .975),
+         PopulationMean = mean(population)) %&gt;%
+    mutate(YouWin = ConfLow &lt; PopulationMean &amp; ConfHigh &gt; PopulationMean)
+}</code></pre>
+<p>And we’ll play 1000 times…</p>
 <pre class="r"><code>tibble(GameId = 1:1000) %&gt;%
-  mutate(PopulationMean = map(GameId, ~ floor(runif(1) * 10000 + 10)),
-         PopulationStandardDeviation = map(GameId, ~ floor(runif(1) * 30 + 10))) %&gt;% # Choose Population Parameters
-  mutate(Sample = map2(PopulationMean, PopulationStandardDeviation, ~ rnorm(sample_size, .x, .y))) %&gt;% # Sample The Population
-  mutate(BootstrapStatistics = map(Sample, ~ sapply(1:10000, function(x) mean(sample(.x, sample_size, replace=TRUE))))) %&gt;% # Bootstrap Steps One and Two
-  mutate(ConfLow = map(BootstrapStatistics, ~ quantile(.x, .025))) %&gt;% # Bootstrap Step Three
-  mutate(ConfHigh = map(BootstrapStatistics, ~ quantile(.x, .975))) %&gt;% # Bootstrap Step Three
-  select(GameId, ConfLow, ConfHigh, PopulationMean) %&gt;% # Just select what we&#39;re interested in.
+  mutate(Game = map(GameId, ~ play_game())) %&gt;%
   unnest() %&gt;%
-  mutate(YouWin = PopulationMean &gt; ConfLow &amp; PopulationMean &lt; ConfHigh) %&gt;% # Did you win?
   count(YouWin) %&gt;% # Count the wins
   mutate(Percent = n / sum(n)) %&gt;% # Calculate the percentage
   filter(YouWin)</code></pre>
 <pre><code>## # A tibble: 1 x 3
 ##   YouWin     n Percent
 ##   &lt;lgl&gt;  &lt;int&gt;   &lt;dbl&gt;
-## 1 TRUE     942   0.942</code></pre>
+## 1 TRUE     960    0.96</code></pre>
 <p>Close enough :)</p>
 </div>
