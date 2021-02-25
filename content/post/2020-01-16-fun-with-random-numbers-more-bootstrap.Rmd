@@ -1,0 +1,79 @@
+---
+title: 'Fun with Random Numbers: More Bootstrap'
+author: ~
+date: '2020-01-16'
+slug: fun-with-random-numbers-more-bootstrap
+categories: []
+tags: []
+keywords: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, warning = FALSE, message = FALSE, 
+                      dpi = 180, cache.lazy = FALSE,
+                      fig.cap = "")
+```
+
+```{r}
+library(tidyverse)
+
+play_game = function(sample_size) {
+  # I choose some numbers.
+  my_numbers = rbeta(1000, 1, 2)
+  
+  # You get a sample.
+  your_numbers = sample(my_numbers, sample_size)
+  #print(your_numbers)
+  
+  # You do Bootstrap step one and two a bunch of times.
+  bootstrap_statistics = sapply(1:10000, function(trash) mean(sample(your_numbers, sample_size, replace = TRUE)))
+  
+  # Then Bootstrap step three, extract the interval. Then check whether you win...
+  tibble(ConfLow = quantile(bootstrap_statistics, .025),
+         ConfHigh = quantile(bootstrap_statistics, .975),
+         PopulationMean = mean(my_numbers)) %>%
+    mutate(YouWin = ConfLow < PopulationMean & ConfHigh > PopulationMean)
+}
+```
+
+```{r}
+library(multidplyr)
+cluster = get_default_cluster()
+cluster_library(cluster, packages = c("tidyverse"))
+cluster_assign_value(cluster, "play_game", play_game)
+
+games = crossing(GameId = 1:1000,
+         SampleSize = c(30)) %>%
+  partition() %>%
+  mutate(Game = map(SampleSize, play_game)) %>%
+  collect() %>%
+  unnest()
+
+games %>%
+  ungroup() %>%
+  sample_frac(.1) %>%
+  ggplot(aes(GameId, color = YouWin)) + 
+  geom_errorbar(aes(ymin = ConfLow, ymax = ConfHigh)) + 
+  geom_point(aes(y = PopulationMean))
+
+games = crossing(GameId = 1:1000,
+         SampleSize = c(30)) %>%
+  partition() %>%
+  mutate(Game = map(SampleSize, play_game)) %>%
+  collect() %>%
+  unnest() %>%
+  ungroup() %>%
+  count(SampleSize, YouWin) %>%
+  group_by(SampleSize) %>%
+  mutate(Percent = n / sum(n)) %>%
+  filter(YouWin)
+
+games %>%
+  ggplot(aes(SampleSize, Percent)) + 
+  geom_line() + 
+  geom_point() + 
+  scale_x_log10() + 
+  expand_limits(y = 1) + 
+  geom_hline(yintercept = .95, lty = 2, color = "grey50")
+```
+

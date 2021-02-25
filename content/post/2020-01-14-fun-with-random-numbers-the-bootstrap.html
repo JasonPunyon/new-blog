@@ -53,8 +53,8 @@ your_numbers = sample(my_numbers, sample_size)</code></pre>
 <p>Step three is to find the range that contains the middle 95% of your bootstrap statistics. This range is your final guess.</p>
 <pre class="r"><code>conf_low = quantile(bootstrap_statistics, .025, names = FALSE)
 conf_high = quantile(bootstrap_statistics, .975, names = FALSE)</code></pre>
-<p>So in this run your guess is that <code>my_mean</code> is between 6522.5 and 6527.8</p>
-<p>In this round of the game <code>my_mean</code> = 6524. You WIN, YAY!</p>
+<p>So in this run your guess is that <code>my_mean</code> is between 2303.3 and 2313.9</p>
+<p>In this round of the game <code>my_mean</code> = 2308. You WIN, YAY!</p>
 </div>
 <div id="but" class="section level1">
 <h1>But…</h1>
@@ -86,6 +86,6 @@ conf_high = quantile(bootstrap_statistics, .975, names = FALSE)</code></pre>
 <pre><code>## # A tibble: 1 x 3
 ##   YouWin     n Percent
 ##   &lt;lgl&gt;  &lt;int&gt;   &lt;dbl&gt;
-## 1 TRUE     948   0.948</code></pre>
+## 1 TRUE     952   0.952</code></pre>
 <p>Close enough :)</p>
 </div>
