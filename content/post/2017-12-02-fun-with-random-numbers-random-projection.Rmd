@@ -16,7 +16,7 @@ So, there's this bit of math called the Johnson-Lindenstrauss lemma. It makes a 
 
 Fantastic, right? What does it mean in slightly more lay speak?
 
-###The Fantastic Claim
+### The Fantastic Claim
 
 Let's say you have a set of 1000 points in a 10,000 dimensional space. These points could be the brightness of pixels from 100x100 grayscale images. Or maybe they're the term counts of the 10,000 most frequent terms in a document from a corpus of documents. Whatever they are, each point has 10,000 dimensions. 
 
@@ -34,7 +34,7 @@ The JL lemma says that the number of dimensions you need in your lower dimension
 
 OK, let's stop and take a breath. This result is absolutely-positively-100%-certified-grade-A-what-the-hell-is-up-with-the-universe to me. It's beautiful and it makes my brain hurt. When I first thought about it I couldn't do anything but stand up and pace around for a while. Take a minute or two to do the same.
 
-###The Fantastic Method
+### The Fantastic Method
 
 Welcome back.
 
