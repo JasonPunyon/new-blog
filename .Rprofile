@@ -1,2 +1,6 @@
 source("renv/activate.R")
-options(blogdown.hugo.version = "0.83.1")
+
+
+
+# fix Hugo version
+options(blogdown.hugo.version = "0.89.4")
