@@ -102,10 +102,10 @@
     },
     "blogdown": {
       "Package": "blogdown",
-      "Version": "1.8",
+      "Version": "1.18",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9c77de7db6cbafdffc6445f873f4e835"
+      "Hash": "17045c17691502267d716133eb7058c8"
     },
     "bookdown": {
       "Package": "bookdown",
@@ -774,10 +774,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.29",
+      "Version": "0.40",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e2e5fb1a74fbb68b27d6efc5372635dc"
+      "Hash": "be07d23211245fc7d4209f54c4e4ffc8"
     },
     "xml2": {
       "Package": "xml2",

@@ -5,7 +5,7 @@ title: Jason Punyon
 theme: hugo-tranquilpeak-theme
 paginate: 7
 canonifyurls: yes
-ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "(^|/)renv$", "renv\\.lock$"]
 permalinks:
   posts: /blog/:year/:month/:day/:slug/
 taxonomies:
@@ -13,6 +13,9 @@ taxonomies:
   category: categories
   tag: tags
 markup:
+  goldmark:
+    renderer:
+      unsafe: true
   tableOfContents:
     endLevel: 3
     ordered: no
