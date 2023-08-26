@@ -8,96 +8,174 @@ draft: true
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
 
-<p>You can count the most frequent items in a stream efficiently in time and space.</p>
-<p><a href="https://www.usenix.org/system/files/conference/atc18/atc18-gong.pdf" class="uri">https://www.usenix.org/system/files/conference/atc18/atc18-gong.pdf</a></p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
-## ✔ tibble  3.1.6     ✔ dplyr   1.0.8
-## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-## ✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>register &lt;- function() {
-  # A Heavy Keeper Register keeps a value from the stream and a counter
-  value &lt;- &quot;☃&quot;
-  counter &lt;- 0
+<p>Let’s play a game. Someone’s gonna produce us a stream of items. We’re gonna get the items one at a time, and then in a while (maybe after a billion or a trillion or a zillion items) they’re gonna ask us what the most frequent items in the stream were. If we answer correctly, WE WIN!</p>
+<p>To try and win the game we’re going to use a data structure called “Heavy Keeper”. Let’s start with the smallest useful heavy keeper, it’s only going to try to find the single most frequent item in the stream. We’re going to keep track of (1) the item we think is the most frequent item so far, and (2) an estimate of that item’s count.</p>
+<div id="state" class="section level2">
+<h2>State</h2>
+<pre class="r"><code>heavy_keeper &lt;- function() {
+  most_frequent_item &lt;- NA
+  estimated_count &lt;- 1
 
-  function(val = NA) {
-    if (is.na(val)) {
-      # If we don&#39;t pass a value, read the current info from the register.
-      return(tibble(RegisterValue = value, Counter = counter))
-    }
-
-    if (counter == 0) {
-      # If the counter is currently zero, set the value to the passed in
-      # value and increment the counter.
-      value &lt;&lt;- val
-      counter &lt;&lt;- 1
-    } else if (val == value) {
-      # (N.B. counter != 0)
-      # If the val passed in is the value in the register, increment
-      # the counter.
-      counter &lt;&lt;- counter + 1
-    } else if (runif(1) &lt; 1.08^-counter) {
-      # (N.B. counter != 0)
-      # (N.B. val != value)
-      # Pick a number between 0 and 1.
-      # If the number is less than 1 / 1.08^counter...decrement the count.
-      counter &lt;&lt;- counter - 1
-    }
-    return(tibble(RegisterValue = value, Counter = counter))
+  function() {
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
   }
-}
+}</code></pre>
+<p>When we want a new Heavy Keeper, we call the function.</p>
+<pre class="r"><code>hk &lt;- heavy_keeper()</code></pre>
+<p>And when we want to read the Heavy Keeper’s state, we call that function.</p>
+<pre class="r"><code>hk()</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   MostFrequentItem EstimatedCount
+##   &lt;lgl&gt;                     &lt;dbl&gt;
+## 1 NA                            1</code></pre>
+</div>
+<div id="items" class="section level2">
+<h2>Items</h2>
+<p>We want to pass items to the Heavy Keeper, so let’s add an optional argument to the inner function. If we pass an item, we’ll do the thing, and then we’ll always read out the state.</p>
+<pre class="r"><code>heavy_keeper &lt;- function() {
+  most_frequent_item &lt;- NA
+  estimated_count &lt;- 1
 
-# Trial
-# New Registers
-# New Stream
+  do_the_thing &lt;- function(item) {
+    # COMING SOON
+  }
 
-nr &lt;- 30
+  function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
 
-get_sample &lt;- \() tibble(Id = 1:1000,
-                         Value = sample(1:100,
-                                        1000,
-                                        replace = TRUE,
-                                        prob = exp(1:100))) %&gt;%
-                  mutate(RegisterId = (digest::digest2int(as.character(Value)) %% nr) + 1)
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+}</code></pre>
+</div>
+<div id="the-first-item" class="section level2">
+<h2>The First Item</h2>
+<p>I say when someone passes us the first item, we start counting it.</p>
+<pre class="r"><code>  do_the_thing &lt;- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item &lt;&lt;- item
+    }
+  }</code></pre>
+<pre class="r"><code>hk &lt;- heavy_keeper()
+hk(&quot;KNIBB HIGH FOOTBALL RULES&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   MostFrequentItem          EstimatedCount
+##   &lt;chr&gt;                              &lt;dbl&gt;
+## 1 KNIBB HIGH FOOTBALL RULES              1</code></pre>
+<p>Alright! We’re counting!</p>
+</div>
+<div id="another-first-item" class="section level2">
+<h2>Another First Item</h2>
+<p>Now if we pass the same item again…</p>
+<pre class="r"><code>hk(&quot;KNIBB HIGH FOOTBALL RULES&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   MostFrequentItem          EstimatedCount
+##   &lt;chr&gt;                              &lt;dbl&gt;
+## 1 KNIBB HIGH FOOTBALL RULES              1</code></pre>
+<p>Welp we aren’t exactly counting very high now are we :/ I say that if someone passes us the same item again we should increase our estimate of the count.</p>
+<pre class="r"><code>  do_the_thing &lt;- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item &lt;&lt;- item
+    } else if (item == most_frequent_item) {
+      estimated_count &lt;&lt;- estimated_count + 1
+    }
+  }</code></pre>
+<pre class="r"><code>hk &lt;- heavy_keeper()
+hk(&quot;KNIBB HIGH FOOTBALL RULES&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   MostFrequentItem          EstimatedCount
+##   &lt;chr&gt;                              &lt;dbl&gt;
+## 1 KNIBB HIGH FOOTBALL RULES              1</code></pre>
+<pre class="r"><code>hk(&quot;KNIBB HIGH FOOTBALL RULES&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   MostFrequentItem          EstimatedCount
+##   &lt;chr&gt;                              &lt;dbl&gt;
+## 1 KNIBB HIGH FOOTBALL RULES              2</code></pre>
+<p>Alright! We’re counting.</p>
+</div>
+<div id="a-challenger-appears" class="section level2">
+<h2>A Challenger Appears</h2>
+<p>What happens if we pass a new item?</p>
+<pre class="r"><code>hk(&quot;O&#39;DOYLE RULES&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   MostFrequentItem          EstimatedCount
+##   &lt;chr&gt;                              &lt;dbl&gt;
+## 1 KNIBB HIGH FOOTBALL RULES              2</code></pre>
+<p>Not very exciting :/ Let’s liven it up. I say we need to decrement the count. If we decrement it all the time, we’d have the first pass of the <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer-Moore majority vote algorithm</a>, and this is a Heavy Keeper blog post so obviously we can’t do that. We’re only gonna decrement it sometimes…but when?</p>
+</div>
+<div id="when" class="section level2">
+<h2>When</h2>
+<p>Let’s think a minute. At the end of this thing we’re hoping to have an element with a high count, not a low one, right? So the higher the estimated count we have, the less likely we should be to decrement it. An item with a small count that encounters challengers will decrement away quickly, while an item with a large count will be more stable. Heavy Keeper uses the following formula to calculate the probability of decrement: <span class="math display">\[ P_{decrement}=\frac{1}{1.08^{Count}} \]</span></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Now we don’t want to decrement the count too far. I say if we decrement the count all the way down to zero, we replace <code>most_frequent_item</code> with the item that was passed in, and reset the estimated count to 1. With this final bit <code>do_the_thing</code> is done.</p>
+<pre class="r"><code>  do_the_thing &lt;- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item &lt;&lt;- item
+    } else if (item == most_frequent_item) {
+      estimated_count &lt;&lt;- estimated_count + 1
+    } else if (runif(1) &lt; 1.08^(-1 * estimated_count)) {
+      estimated_count &lt;&lt;- estimated_count - 1
+      if (estimated_count == 0) {
+        most_frequent_item &lt;&lt;- item
+        estimated_count &lt;&lt;- 1
+      }
+    }
+  }</code></pre>
+</div>
+<div id="porcelain" class="section level2">
+<h2>Porcelain</h2>
+<pre class="r"><code>  hk_single &lt;- function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
 
-get_registers &lt;- \() tibble(RegisterId = 1:nr) %&gt;%
-  mutate(Register = map(RegisterId, \(x) register()))
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
 
-count_sample &lt;- \(sample, registers) sample %&gt;%
-  inner_join(registers) %&gt;%
-  mutate(output = map2(Value, Register, \(x,y) y(x))) %&gt;%
-  unnest(output) %&gt;%
-  inner_join(sample %&gt;% count(Value, name = &quot;TrueCount&quot;), by = c(&quot;RegisterValue&quot; = &quot;Value&quot;))
+  hk_vectorized &lt;- Vectorize(hk_single)
 
-le_results &lt;- tibble(Trial = 1:2) %&gt;%
-  mutate(Sample = map(Trial, \(x) get_sample())) %&gt;%
-  mutate(Registers = map(Trial, \(x) get_registers())) %&gt;%
-  mutate(Results = map2(Sample, Registers, count_sample)) %&gt;%
-  unnest(Results)</code></pre>
-<pre><code>## Joining, by = &quot;RegisterId&quot;
-## Joining, by = &quot;RegisterId&quot;</code></pre>
-<pre class="r"><code>le_results %&gt;%
-  select(Trial, Id, Value, RegisterId, RegisterValue, Counter) %&gt;%
-  filter(Trial == 2) %&gt;%
-  ggplot(aes(Id, Counter)) +
-  geom_line() + 
-  facet_wrap(~ RegisterId) </code></pre>
-<pre><code>## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?
-## geom_path: Each group consists of only one observation. Do you need to adjust
-## the group aesthetic?</code></pre>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r"><code>le_results %&gt;%
-  arrange(desc(Trial), desc(Id)) %&gt;%
-  distinct(Trial, RegisterId, .keep_all = TRUE) %&gt;%
-  select(Trial, RegisterId, RegisterValue, Counter, TrueCount) %&gt;%
-  mutate(ErrorPercentage = (Counter - TrueCount) / TrueCount) %&gt;%
-  ggplot(aes(ErrorPercentage)) +
-  geom_density() </code></pre>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+  # Make the vectorized results look nice.
+  function(items = NA) {
+    hk_vectorized(items) %&gt;%
+      t() %&gt;%
+      as_tibble() %&gt;%
+      unnest(everything())
+  }</code></pre>
+<pre class="r"><code>le_results &lt;- tibble(oneProb = 1:10) %&gt;%
+  crossing(Trial = 1:100) %&gt;%
+  mutate(Results = map(oneProb, function(p) {
+    hk &lt;- heavy_keeper()
+    a_sample &lt;- sample(1:100, 200, replace = TRUE, prob = c(p, rep(.1, 99)))
+    hk(a_sample)
+    hk() %&gt;%
+      mutate(OneCount = sum(a_sample == 1))
+  })) %&gt;%
+  unnest(Results)
+
+le_results %&gt;%
+  group_by(oneProb) %&gt;%
+  summarize(Success = mean(MostFrequentItem == 1), 
+            MinOnes = min(OneCount), 
+            MaxOnes = max(OneCount), 
+            MeanOnes = mean(OneCount)) %&gt;%
+  print(n = Inf)</code></pre>
+<pre><code>## # A tibble: 10 × 5
+##    oneProb Success MinOnes MaxOnes MeanOnes
+##      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;
+##  1       1    0.11      10      30     19.3
+##  2       2    0.22      23      47     33.4
+##  3       3    0.31      36      66     47.6
+##  4       4    0.5       42      74     57.8
+##  5       5    0.59      51      84     68.2
+##  6       6    0.85      65      91     76.4
+##  7       7    0.95      64     103     82.8
+##  8       8    0.97      74     116     90.1
+##  9       9    1         80     112     94.2
+## 10      10    1         83     114    101.</code></pre>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</div>

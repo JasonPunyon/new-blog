@@ -5,13 +5,398 @@ draft: true
 #slug: fun-with-random-numbers-heavy-keeper
 ---
 
-You can count the most frequent items in a stream efficiently in time and space.
+```{r setup, cache=FALSE, include=FALSE}
+library(tidyverse)
+
+library(knitr)
+hook_source <- knit_hooks$get("source")
+knit_hooks$set(source = function(x, options) {
+  x <- xfun::split_lines(x)  # split into individual lines
+
+  le_start <- which(grepl("#FOCUS", x))
+  le_end <- which(grepl("#/FOCUS", x))
+
+  if (length(le_start) != 0 & length(le_end) != 0) {
+    x <- x[(le_start+1):(le_end-1)]
+    x <- paste(x, collapse = "\n")  # combine into a single string
+  }
+
+  hook_source(x, options)
+})
+
+library(lemon)
+knit_print.data.frame <- lemon_print
+```
+
+Let's play a game. Someone's gonna produce us a stream of items. We're gonna get the items one at a time, and then in a while (maybe after a billion or a trillion or a zillion items) they're gonna ask us what the most frequent items in the stream were. If we answer correctly, WE WIN!
+
+To try and win the game we're going to use a data structure called "Heavy Keeper". Let's start with the smallest useful heavy keeper, it's only going to try to find the single most frequent item in the stream. We're going to keep track of (1) the item we think is the most frequent item so far, and (2) an estimate of that item's count.
+
+## State
+
+```{r}
+heavy_keeper <- function() {
+  most_frequent_item <- NA
+  estimated_count <- 1
+
+  function() {
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+}
+```
+
+When we want a new Heavy Keeper, we call the function.
+
+```{r}
+hk <- heavy_keeper()
+```
+
+And when we want to read the Heavy Keeper's state, we call that function.
+
+```{r}
+hk()
+```
+
+## Items
+
+We want to pass items to the Heavy Keeper, so let's add an optional argument to the inner function. If we pass an item, we'll do the thing, and then we'll always read out the state.
+
+```{r}
+heavy_keeper <- function() {
+  most_frequent_item <- NA
+  estimated_count <- 1
+
+  do_the_thing <- function(item) {
+    # COMING SOON
+  }
+
+  function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
+
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+}
+```
+
+## The First Item
+
+I say when someone passes us the first item, we start counting it.
+
+```{r}
+heavy_keeper <- function() {
+  most_frequent_item <- NA
+  estimated_count <- 1
+
+  #FOCUS
+  do_the_thing <- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item <<- item
+    }
+  }
+  #/FOCUS
+  function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
+
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+}
+```
+
+```{r}
+hk <- heavy_keeper()
+hk("KNIBB HIGH FOOTBALL RULES")
+```
+
+Alright! We're counting!
+
+## Another First Item
+
+Now if we pass the same item again...
+
+```{r}
+hk("KNIBB HIGH FOOTBALL RULES")
+```
+
+Welp we aren't exactly counting very high now are we :/ I say that if someone passes us the same item again we should increase our estimate of the count.
+
+```{r}
+heavy_keeper <- function() {
+  most_frequent_item <- NA
+  estimated_count <- 1
+
+  #FOCUS
+  do_the_thing <- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item <<- item
+    } else if (item == most_frequent_item) {
+      estimated_count <<- estimated_count + 1
+    }
+  }
+  #/FOCUS
+  function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
+
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+}
+```
+
+```{r}
+hk <- heavy_keeper()
+hk("KNIBB HIGH FOOTBALL RULES")
+hk("KNIBB HIGH FOOTBALL RULES")
+```
+
+Alright! We're counting.
+
+## A Challenger Appears
+
+What happens if we pass a new item?
+
+```{r}
+hk("O'DOYLE RULES")
+```
+
+Not very exciting :/ Let's liven it up. I say we need to decrement the count. If we decrement it all the time, we'd have the first pass of the [Boyer-Moore majority vote algorithm](https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm), and this is a Heavy Keeper blog post so obviously we can't do that. We're only gonna decrement it sometimes...but when?
+
+## When
+
+Let's think a minute. At the end of this thing we're hoping to have an element with a high count, not a low one, right? So the higher the estimated count we have, the less likely we should be to decrement it. An item with a small count that encounters challengers will decrement away quickly, while an item with a large count will be more stable. Heavy Keeper uses the following formula to calculate the probability of decrement: $$ P_{decrement}=\frac{1}{1.08^{Count}} $$
+
+```{r, echo=FALSE}
+tibble(EstimatedCount=1:100) %>%
+  ggplot(aes(EstimatedCount)) + 
+  stat_function(fun = \(x) 1.08 ^ (-1 * x), geom="point") + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(title="When to decrement",
+       y="Probability of decrement") + 
+  theme_minimal()
+```
+
+Now we don't want to decrement the count too far. I say if we decrement the count all the way down to zero, we replace `most_frequent_item` with the item that was passed in, and reset the estimated count to 1. With this final bit `do_the_thing` is done.
+
+```{r}
+heavy_keeper <- function() {
+  most_frequent_item <- NA
+  estimated_count <- 1
+
+  #FOCUS
+  do_the_thing <- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item <<- item
+    } else if (item == most_frequent_item) {
+      estimated_count <<- estimated_count + 1
+    } else if (runif(1) < 1.08^(-1 * estimated_count)) {
+      estimated_count <<- estimated_count - 1
+      if (estimated_count == 0) {
+        most_frequent_item <<- item
+        estimated_count <<- 1
+      }
+    }
+  }
+  #/FOCUS
+  function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
+
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+}
+```
+
+## Porcelain
+
+```{r}
+heavy_keeper <- function() {
+  most_frequent_item <- NA
+  estimated_count <- 1
+
+  do_the_thing <- function(item) {
+    if (is.na(most_frequent_item)) {
+      most_frequent_item <<- item
+    } else if (item == most_frequent_item) {
+      estimated_count <<- estimated_count + 1
+    } else if (runif(1) < 1.08^(-1 * estimated_count)) {
+      estimated_count <<- estimated_count - 1
+      if (estimated_count == 0) {
+        most_frequent_item <<- item
+        estimated_count <<- 1
+      }
+    }
+  }
+  #FOCUS
+  hk_single <- function(item = NA) {
+    if (!is.na(item)) {
+      do_the_thing(item)
+    }
+
+    tibble(MostFrequentItem = most_frequent_item,
+           EstimatedCount   = estimated_count)
+  }
+
+  hk_vectorized <- Vectorize(hk_single)
+
+  # Make the vectorized results look nice.
+  function(items = NA) {
+    hk_vectorized(items) %>%
+      t() %>%
+      as_tibble() %>%
+      unnest(everything())
+  }
+  #/FOCUS
+}
+```
+
+```{r}
+le_results <- tibble(oneProb = 1:10) %>%
+  crossing(Trial = 1:100) %>%
+  mutate(Results = map(oneProb, function(p) {
+    hk <- heavy_keeper()
+    a_sample <- sample(1:100, 200, replace = TRUE, prob = c(p, rep(.1, 99)))
+    hk(a_sample)
+    hk() %>%
+      mutate(OneCount = sum(a_sample == 1))
+  })) %>%
+  unnest(Results)
+
+le_results %>%
+  group_by(oneProb) %>%
+  summarize(Success = mean(MostFrequentItem == 1), 
+            MinOnes = min(OneCount), 
+            MaxOnes = max(OneCount), 
+            MeanOnes = mean(OneCount)) %>%
+  print(n = Inf)
+```
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+```{r, include=FALSE}
+knitr::knit_exit()
+```
+
+```{r}
+# When we want a new heavy keeper, we call this function.
+heavy_keeper <- function() {
+  # We're going to keep one item, hopefully the heaviest. This is where we keep it
+  kept <- NA
+
+  # The estimate of the kept item's count.
+  count <- 1
+
+  # Read out the current state of the heavy keeper.
+  read <- \() tibble(Kept = kept, Count = count)
+
+  # The Heavy Keeper is itself a function.
+  # Call it with no argument to read the current state.
+  # Call it with an item and Heavy Keeper will do its thing.
+  hk_base <- function(item = NA) {
+    # If there is no item, read out the current state.
+    if (is.na(item)) {
+      return(read())
+    }
+
+    # Keep the first item we get.
+    if (is.na(kept)) {
+      kept <<- item
+      return(read())
+    }
+
+    # <NO TRICKS>
+    # If the item is the currently kept item, increment the count.
+    # This is just counting.
+    # </NO TRICKS>
+    if (item == kept) {
+      count <<- count + 1
+      return(read())
+    }
+
+    # <TRICKS>
+    # If the item passed in is not the currently kept item, pick a number between 0 and 1.
+    # If that number is less than 1 / 1.08^count, decrement the count.
+    # </TRICKS>
+    if (runif(1) < 1.08^(-1 * count)) {
+      count <<- count - 1
+
+      # If we've exhausted the counter down to zero, replace the currently kept item
+      if (count == 0) {
+        count <<- 1
+        kept <<- item
+      }
+    }
+
+    return(read())
+  }
+
+  # We vectorize the hk_base function, so we can pass it more than
+  # one item at a time.
+  hk_v <- Vectorize(hk_base)
+
+  # Make the vectorized results look nice.
+  function(items = NA) {
+    hk_v(items) %>%
+      t() %>%
+      as_tibble() %>%
+      unnest(everything()) %>%
+      tail()
+  }
+}
+```
+
+The heavy keeper starts out empty...
+
+```{r}
+hk <- heavy_keeper()
+hk()
+```
+
+When we pass in some items it will start counting.
+
+```{r}
+some_items <- rep(1, 100) # One hundred ones in a row
+hk(some_items)
+```
+
+Like I said in the code: No Tricks! When we see the thing we're currently counting, we count it.
+
+# TRICKS
+
+We've passed in 100 1's and our current count is 100. Let's pass in a 2.
+
+```{r}
+hk(2)
+```
+
+Nothing happened!
+
+```{r, include=FALSE}
+knitr::knit_exit()
+```
+
+# What kind of items?
+
+Excellent question! If I said the items were the days of the week, this game is checkers. We make an array, 
+
+You can count the most frequent items in a stream accurately, and efficiently in time and space.
 
 https://www.usenix.org/system/files/conference/atc18/atc18-gong.pdf
 
-```{r}
-library(tidyverse)
-```
+
+
+Imagine we have an incoming stream of data and we want to know what the most frequent items in the stream are.
 
 ```{r}
 register <- function() {
