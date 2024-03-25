@@ -16,6 +16,12 @@
     </ul>
     <ul class="sidebar-buttons">
       {{ partial "menu.html" (dict "menu" .Site.Menus.links "root" $) }}
+      <li class="sidebar-button">
+        <a class="sidebar-button-link" href="https://fosstodon.org/@JasonPunyon" target="_blank" rel="me" title="Mastodon">
+          <i class="sidebar-button-icon fab fa-lg fa-mastodon" aria-hidden="true"></i>
+        </a>
+      </li>
+      
     </ul>
     <ul class="sidebar-buttons">
       {{ partial "menu.html" (dict "menu" .Site.Menus.misc "root" $) }}

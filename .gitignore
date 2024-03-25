@@ -3,6 +3,6 @@
 .Rproj.user
 .httr-oauth-rdfp
 .Rhistory
-.DS_Store
+**/*/.DS_Store
 Thumbs.db
 .hugo_build.lock
