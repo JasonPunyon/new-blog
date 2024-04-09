@@ -1,0 +1,17 @@
+---
+title: Farey Linked List
+date: '2024-03-25'
+slug: farey-linked-list
+draft: true
+---
+
+The Farey Numbers are a natural coordinate system for linked lists.
+
+<!--more-->
+
+Audience: Programmers interested in linked lists, distributed systems, etc.
+
+Conclusion: The Farey Numbers are a natural coordinate system for linked lists.
+
+Idea: Linked List Editor
+
