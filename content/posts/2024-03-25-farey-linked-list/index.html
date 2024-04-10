@@ -2,14 +2,97 @@
 title: Farey Linked List
 date: '2024-03-25'
 slug: farey-linked-list
-draft: true
 ---
 
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
 
-<p>The Farey Numbers are a natural coordinate system for linked lists.</p>
+<p>The Farey Numbers are a good coordinate system for linked lists.</p>
 <!--more-->
-<p>Audience: Programmers interested in linked lists, distributed systems, etc.</p>
-<p>Conclusion: The Farey Numbers are a natural coordinate system for linked lists.</p>
-<p>Idea: Linked List Editor</p>
+<style type="text/css">
+body {
+    line-height: 3em !important;
+}
+
+.katex {
+    font-size: 1.1em !important;
+    /*line-height: 1.7em !important;*/
+    padding: 0 .15em;
+    white-space: nowrap;
+}
+
+.yep {
+  text-align:center;
+}
+</style>
+<div id="what-are-farey-numbers" class="section level2">
+<h2>What are Farey numbers?</h2>
+<p>Farey numbers are fractions. The first two Farey numbers are <span class="math inline">\(\displaystyle\frac{0}{1}\)</span> and <span class="math inline">\(\displaystyle\frac{1}{1}\)</span>. If you have two Farey numbers <span class="math inline">\(\displaystyle\frac{a}{c}\)</span> and <span class="math inline">\(\displaystyle\frac{b}{d}\)</span>, you can make a new Farey number <span class="math inline">\(\displaystyle\frac{e}{f}\)</span> by summing their numerators and denominators.</p>
+<p><span class="math display">\[ \displaystyle\frac{e}{f} = \frac{a+b}{c+d} \]</span></p>
+<p>The new Farey number will always be strictly between the first two, so if <span class="math inline">\(\displaystyle\frac{b}{d}\)</span> were the larger of the two then</p>
+<p><span class="math display">\[ \frac{a}{c} &lt; \space\frac{a+b}{c+d}\space&lt; \frac{b}{d} \]</span></p>
+<div id="more-farey-numbers" class="section level3">
+<h3>More Farey numbers</h3>
+<p>We have two Farey numbers, so we can make another one between them. According to the rule, that number is <span class="math inline">\(\displaystyle\frac{0 + 1}{1 + 1}=\frac{1}{2}\)</span> . Our list of Farey numbers is now
+<span class="math display">\[
+\Biggl \{ \frac{0}{1}, \frac{1}{2}, \frac{1}{1} \Biggr \}
+\]</span></p>
+<p>Now we can make two more Farey numbers. Inserting between <span class="math inline">\(\displaystyle\frac{0}{1}\)</span> and <span class="math inline">\(\displaystyle\frac{1}{2}\)</span> gives us <span class="math inline">\(\displaystyle\frac{0+1}{1+2}=\frac{1}{3}\)</span>. Inserting between <span class="math inline">\(\displaystyle\frac{1}{2}\)</span> and <span class="math inline">\(\displaystyle\frac{1}{1}\)</span> gives us <span class="math inline">\(\displaystyle\frac{1+1}{2+1}=\frac{2}{3}\)</span>. Now our list is</p>
+<p><span class="math display">\[ \Biggl \{ \frac{0}{1}, \frac{1}{3}, \frac{1}{2}, \frac{2}{3}, \frac{1}{1} \Biggr \} \]</span></p>
+<p>Now we can make four more Farey Numbers. If we make them all, our list becomes</p>
+<p><span class="math display">\[ \Biggl \{ \frac{0}{1}, \frac{1}{4}, \frac{1}{3}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{2}{3}, \frac{3}{4}, \frac{1}{1} \Biggr \} \]</span></p>
+</div>
+<div id="and-so-on" class="section level3">
+<h3>And so on…</h3>
+<p>We can continue making new Farey numbers forever and we’ll never make the same Farey number twice. Also we’ll never make Farey numbers that are equivalent fractions. So, for example, since we’ve already made <span class="math inline">\(\displaystyle\frac{1}{2}\)</span> that means we’ll never make <span class="math inline">\(\displaystyle\frac{1}{2}\)</span> again, and we’ll also never make any of <span class="math inline">\(\displaystyle\Biggl\{\frac{2}{4},\frac{3}{6},\frac{4}{8}, ... \Biggr\}\)</span>.</p>
+</div>
+</div>
+<div id="linked-list" class="section level2">
+<h2>Linked List?</h2>
+<p>Farey numbers remind me of linked lists. A linked list is sequence of elements, each one linked to the next. The first two elements are the begin and end of the list.</p>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="73" width="120" font-family="Menlo,Lucida Console,monospace">
+<style type="text/css">svg {   color: #000000;}@media (prefers-color-scheme: dark) {   svg {      color: #000000;   }}</style>
+<g transform='translate(8,16)'><path d='M 40,16 L 88,16' fill='none' stroke='currentColor'></path><polygon points='88.000000,16.000000 76.000000,10.400000 76.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 88.000000, 16.000000)'></polygon><circle cx='40' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle><circle cx='96' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle>
+<style>  text {       text-anchor: middle;       font-family: "Menlo","Lucida Console","monospace";       fill: currentColor;       font-size: 1em;  }</style>
+<text x='24' y='52'>b</text><text x='32' y='52'>e</text><text x='40' y='52'>g</text><text x='48' y='52'>i</text><text x='56' y='52'>n</text><text x='88' y='52'>e</text><text x='96' y='52'>n</text><text x='104' y='52'>d</text></g>
+</svg>
+<p>If you have two elements of a linked list, you can make a new element between them. We have the begin and end of the list, so we can make another one between them. Our linked list now looks like this.</p>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="73" width="208" font-family="Menlo,Lucida Console,monospace">
+<style type="text/css">svg {   color: #000000;}@media (prefers-color-scheme: dark) {   svg {      color: #000000;   }}</style>
+<g transform='translate(8,16)'><path d='M 40,16 L 88,16' fill='none' stroke='currentColor'></path><path d='M 128,16 L 176,16' fill='none' stroke='currentColor'></path><polygon points='96.000000,16.000000 84.000000,10.400000 84.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 88.000000, 16.000000)'></polygon><polygon points='176.000000,16.000000 164.000000,10.400000 164.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 176.000000, 16.000000)'></polygon><path d='M 112,0 A 16,16 0 0,0 96,16' fill='none' stroke='currentColor'></path><path d='M 112,0 A 16,16 0 0,1 128,16' fill='none' stroke='currentColor'></path><path d='M 96,16 A 16,16 0 0,0 112,32' fill='none' stroke='currentColor'></path><path d='M 128,16 A 16,16 0 0,1 112,32' fill='none' stroke='currentColor'></path><circle cx='40' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle><circle cx='184' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle>
+<style>  text {       text-anchor: middle;       font-family: "Menlo","Lucida Console","monospace";       fill: currentColor;       font-size: 1em;  }</style>
+<text x='24' y='52'>b</text><text x='32' y='52'>e</text><text x='40' y='52'>g</text><text x='48' y='52'>i</text><text x='56' y='52'>n</text><text x='176' y='52'>e</text><text x='184' y='52'>n</text><text x='192' y='52'>d</text></g>
+</svg>
+<p>Now there are two places to insert into the list: between begin and the node we just inserted, and between the node we just inserted and end. That sentence there took a lot of words to describe those positions because the name for the node we just inserted is “the node we just inserted”. That isn’t going to scale to the rest of this conversation. We need a better name to make the sentence shorter. The element was between <strong>b</strong>egin and <strong>e</strong>nd, so we’ll call it <strong>be</strong>.</p>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="73" width="200" font-family="Menlo,Lucida Console,monospace">
+<style type="text/css">svg {   color: #000000;}@media (prefers-color-scheme: dark) {   svg {      color: #000000;   }}</style>
+<g transform='translate(8,16)'><path d='M 40,16 L 88,16' fill='none' stroke='currentColor'></path><path d='M 128,16 L 176,16' fill='none' stroke='currentColor'></path><polygon points='96.000000,16.000000 84.000000,10.400000 84.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 88.000000, 16.000000)'></polygon><polygon points='176.000000,16.000000 164.000000,10.400000 164.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 176.000000, 16.000000)'></polygon><path d='M 112,0 A 16,16 0 0,0 96,16' fill='none' stroke='currentColor'></path><path d='M 112,0 A 16,16 0 0,1 128,16' fill='none' stroke='currentColor'></path><path d='M 96,16 A 16,16 0 0,0 112,32' fill='none' stroke='currentColor'></path><path d='M 128,16 A 16,16 0 0,1 112,32' fill='none' stroke='currentColor'></path><circle cx='40' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle><circle cx='184' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle>
+<style>  text {       text-anchor: middle;       font-family: "Menlo","Lucida Console","monospace";       fill: currentColor;       font-size: 1em;  }</style>
+<text x='40' y='52'>b</text><text x='104' y='52'>b</text><text x='112' y='52'>e</text><text x='184' y='52'>e</text></g>
+</svg>
+<p>Now we can make two new elements. Inserting between b and be gives us <strong>bee</strong>. Inserting between <strong>be</strong> and <strong>e</strong> gives us <strong>bee</strong>. Now our list is</p>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="73" width="376" font-family="Menlo,Lucida Console,monospace">
+<style type="text/css">svg {   color: #000000;}@media (prefers-color-scheme: dark) {   svg {      color: #000000;   }}</style>
+<g transform='translate(8,16)'><path d='M 40,16 L 88,16' fill='none' stroke='currentColor'></path><path d='M 128,16 L 176,16' fill='none' stroke='currentColor'></path><path d='M 216,16 L 264,16' fill='none' stroke='currentColor'></path><path d='M 304,16 L 352,16' fill='none' stroke='currentColor'></path><polygon points='96.000000,16.000000 84.000000,10.400000 84.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 88.000000, 16.000000)'></polygon><polygon points='184.000000,16.000000 172.000000,10.400000 172.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 176.000000, 16.000000)'></polygon><polygon points='272.000000,16.000000 260.000000,10.400000 260.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 264.000000, 16.000000)'></polygon><polygon points='352.000000,16.000000 340.000000,10.400000 340.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 352.000000, 16.000000)'></polygon><path d='M 112,0 A 16,16 0 0,0 96,16' fill='none' stroke='currentColor'></path><path d='M 112,0 A 16,16 0 0,1 128,16' fill='none' stroke='currentColor'></path><path d='M 200,0 A 16,16 0 0,0 184,16' fill='none' stroke='currentColor'></path><path d='M 200,0 A 16,16 0 0,1 216,16' fill='none' stroke='currentColor'></path><path d='M 288,0 A 16,16 0 0,0 272,16' fill='none' stroke='currentColor'></path><path d='M 288,0 A 16,16 0 0,1 304,16' fill='none' stroke='currentColor'></path><path d='M 96,16 A 16,16 0 0,0 112,32' fill='none' stroke='currentColor'></path><path d='M 128,16 A 16,16 0 0,1 112,32' fill='none' stroke='currentColor'></path><path d='M 184,16 A 16,16 0 0,0 200,32' fill='none' stroke='currentColor'></path><path d='M 216,16 A 16,16 0 0,1 200,32' fill='none' stroke='currentColor'></path><path d='M 272,16 A 16,16 0 0,0 288,32' fill='none' stroke='currentColor'></path><path d='M 304,16 A 16,16 0 0,1 288,32' fill='none' stroke='currentColor'></path><circle cx='40' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle><circle cx='360' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle>
+<style>  text {       text-anchor: middle;       font-family: "Menlo","Lucida Console","monospace";       fill: currentColor;       font-size: 1em;  }</style>
+<text x='40' y='52'>b</text><text x='104' y='52'>b</text><text x='112' y='52'>b</text><text x='120' y='52'>e</text><text x='192' y='52'>b</text><text x='200' y='52'>e</text><text x='280' y='52'>b</text><text x='288' y='52'>e</text><text x='296' y='52'>e</text><text x='360' y='52'>e</text></g>
+</svg>
+<p>Now we can make four new elements. If we make them all, our list becomes</p>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="73" width="600" font-family="Menlo,Lucida Console,monospace">
+<style type="text/css">svg {   color: #000000;}@media (prefers-color-scheme: dark) {   svg {      color: #000000;   }}</style>
+<g transform='translate(8,16)'><path d='M 40,16 L 72,16' fill='none' stroke='currentColor'></path><path d='M 112,16 L 144,16' fill='none' stroke='currentColor'></path><path d='M 184,16 L 216,16' fill='none' stroke='currentColor'></path><path d='M 256,16 L 288,16' fill='none' stroke='currentColor'></path><path d='M 328,16 L 360,16' fill='none' stroke='currentColor'></path><path d='M 400,16 L 432,16' fill='none' stroke='currentColor'></path><path d='M 472,16 L 504,16' fill='none' stroke='currentColor'></path><path d='M 544,16 L 576,16' fill='none' stroke='currentColor'></path><polygon points='80.000000,16.000000 68.000000,10.400000 68.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 72.000000, 16.000000)'></polygon><polygon points='152.000000,16.000000 140.000000,10.400000 140.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 144.000000, 16.000000)'></polygon><polygon points='224.000000,16.000000 212.000000,10.400000 212.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 216.000000, 16.000000)'></polygon><polygon points='296.000000,16.000000 284.000000,10.400000 284.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 288.000000, 16.000000)'></polygon><polygon points='368.000000,16.000000 356.000000,10.400000 356.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 360.000000, 16.000000)'></polygon><polygon points='440.000000,16.000000 428.000000,10.400000 428.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 432.000000, 16.000000)'></polygon><polygon points='512.000000,16.000000 500.000000,10.400000 500.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 504.000000, 16.000000)'></polygon><polygon points='576.000000,16.000000 564.000000,10.400000 564.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 576.000000, 16.000000)'></polygon><path d='M 96,0 A 16,16 0 0,0 80,16' fill='none' stroke='currentColor'></path><path d='M 96,0 A 16,16 0 0,1 112,16' fill='none' stroke='currentColor'></path><path d='M 168,0 A 16,16 0 0,0 152,16' fill='none' stroke='currentColor'></path><path d='M 168,0 A 16,16 0 0,1 184,16' fill='none' stroke='currentColor'></path><path d='M 240,0 A 16,16 0 0,0 224,16' fill='none' stroke='currentColor'></path><path d='M 240,0 A 16,16 0 0,1 256,16' fill='none' stroke='currentColor'></path><path d='M 312,0 A 16,16 0 0,0 296,16' fill='none' stroke='currentColor'></path><path d='M 312,0 A 16,16 0 0,1 328,16' fill='none' stroke='currentColor'></path><path d='M 384,0 A 16,16 0 0,0 368,16' fill='none' stroke='currentColor'></path><path d='M 384,0 A 16,16 0 0,1 400,16' fill='none' stroke='currentColor'></path><path d='M 456,0 A 16,16 0 0,0 440,16' fill='none' stroke='currentColor'></path><path d='M 456,0 A 16,16 0 0,1 472,16' fill='none' stroke='currentColor'></path><path d='M 528,0 A 16,16 0 0,0 512,16' fill='none' stroke='currentColor'></path><path d='M 528,0 A 16,16 0 0,1 544,16' fill='none' stroke='currentColor'></path><path d='M 80,16 A 16,16 0 0,0 96,32' fill='none' stroke='currentColor'></path><path d='M 112,16 A 16,16 0 0,1 96,32' fill='none' stroke='currentColor'></path><path d='M 152,16 A 16,16 0 0,0 168,32' fill='none' stroke='currentColor'></path><path d='M 184,16 A 16,16 0 0,1 168,32' fill='none' stroke='currentColor'></path><path d='M 224,16 A 16,16 0 0,0 240,32' fill='none' stroke='currentColor'></path><path d='M 256,16 A 16,16 0 0,1 240,32' fill='none' stroke='currentColor'></path><path d='M 296,16 A 16,16 0 0,0 312,32' fill='none' stroke='currentColor'></path><path d='M 328,16 A 16,16 0 0,1 312,32' fill='none' stroke='currentColor'></path><path d='M 368,16 A 16,16 0 0,0 384,32' fill='none' stroke='currentColor'></path><path d='M 400,16 A 16,16 0 0,1 384,32' fill='none' stroke='currentColor'></path><path d='M 440,16 A 16,16 0 0,0 456,32' fill='none' stroke='currentColor'></path><path d='M 472,16 A 16,16 0 0,1 456,32' fill='none' stroke='currentColor'></path><path d='M 512,16 A 16,16 0 0,0 528,32' fill='none' stroke='currentColor'></path><path d='M 544,16 A 16,16 0 0,1 528,32' fill='none' stroke='currentColor'></path><circle cx='40' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle><circle cx='584' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle>
+<style>  text {       text-anchor: middle;       font-family: "Menlo","Lucida Console","monospace";       fill: currentColor;       font-size: 1em;  }</style>
+<text x='40' y='52'>b</text><text x='88' y='52'>b</text><text x='96' y='52'>b</text><text x='104' y='52'>b</text><text x='112' y='52'>e</text><text x='160' y='52'>b</text><text x='168' y='52'>b</text><text x='176' y='52'>e</text><text x='224' y='52'>b</text><text x='232' y='52'>b</text><text x='240' y='52'>e</text><text x='248' y='52'>b</text><text x='256' y='52'>e</text><text x='304' y='52'>b</text><text x='312' y='52'>e</text><text x='368' y='52'>b</text><text x='376' y='52'>e</text><text x='384' y='52'>b</text><text x='392' y='52'>e</text><text x='400' y='52'>e</text><text x='448' y='52'>b</text><text x='456' y='52'>e</text><text x='464' y='52'>e</text><text x='520' y='52'>b</text><text x='528' y='52'>e</text><text x='536' y='52'>e</text><text x='544' y='52'>e</text><text x='584' y='52'>e</text></g>
+</svg>
+</div>
+<div id="squint-real-hard" class="section level2">
+<h2>Squint Real Hard</h2>
+<p>If we squint real hard, our strings of <strong>b</strong>s and <strong>e</strong>s map directly to the Farey numbers! The numerator of the Farey number is the number of e’s in the string, and the denominator is the length of the string.</p>
+<div class="yep">
+<p><span class="math inline">\(\displaystyle b\)</span> has zero <strong>e</strong>s and its length is one so <span class="math inline">\(\displaystyle b=\frac{0}{1}\)</span></p>
+<p><span class="math inline">\(\displaystyle e\)</span> has one <strong>e</strong> and its length is one so <span class="math inline">\(\displaystyle e=\frac{1}{1}\)</span></p>
+<p><span class="math inline">\(\displaystyle be\)</span> has one <strong>e</strong> and its length is two so <span class="math inline">\(\displaystyle be=\frac{1}{2}\)</span></p>
+<p><span class="math inline">\(\displaystyle bbe\)</span> has one <strong>e</strong> and its length is three so <span class="math inline">\(\displaystyle bbe=\frac{1}{3}\)</span></p>
+<p>…and so on, promise.</p>
+</div>
+</div>

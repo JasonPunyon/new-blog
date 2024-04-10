@@ -2,16 +2,126 @@
 title: Farey Linked List
 date: '2024-03-25'
 slug: farey-linked-list
-draft: true
 ---
 
-The Farey Numbers are a natural coordinate system for linked lists.
+The Farey Numbers are a good coordinate system for linked lists.
 
 <!--more-->
 
-Audience: Programmers interested in linked lists, distributed systems, etc.
+```{r setup, echo=FALSE}
+knitr::knit_engines$set(goat = function(options) {
+  code <- paste(options$code)
+  system2("goat", "-sds \"#000000\"", input = code, stdout = TRUE)
+})
+```
 
-Conclusion: The Farey Numbers are a natural coordinate system for linked lists.
+```{css, echo=FALSE}
+body {
+    line-height: 3em !important;
+}
 
-Idea: Linked List Editor
+.katex {
+    font-size: 1.1em !important;
+    /*line-height: 1.7em !important;*/
+    padding: 0 .15em;
+    white-space: nowrap;
+}
 
+.yep {
+  text-align:center;
+}
+```
+
+## What are Farey numbers?
+
+Farey numbers are fractions. The first two Farey numbers are $\displaystyle\frac{0}{1}$ and $\displaystyle\frac{1}{1}$. If you have two Farey numbers $\displaystyle\frac{a}{c}$ and $\displaystyle\frac{b}{d}$, you can make a new Farey number $\displaystyle\frac{e}{f}$ by summing their numerators and denominators.
+
+$$ \displaystyle\frac{e}{f} = \frac{a+b}{c+d} $$
+
+The new Farey number will always be strictly between the first two, so if $\displaystyle\frac{b}{d}$ were the larger of the two then
+
+$$ \frac{a}{c} < \space\frac{a+b}{c+d}\space< \frac{b}{d} $$
+
+### More Farey numbers
+
+We have two Farey numbers, so we can make another one between them. According to the rule, that number is $\displaystyle\frac{0 + 1}{1 + 1}=\frac{1}{2}$ . Our list of Farey numbers is now
+$$
+\Biggl \{ \frac{0}{1}, \frac{1}{2}, \frac{1}{1} \Biggr \}
+$$
+
+Now we can make two more Farey numbers. Inserting between $\displaystyle\frac{0}{1}$ and $\displaystyle\frac{1}{2}$ gives us $\displaystyle\frac{0+1}{1+2}=\frac{1}{3}$. Inserting between $\displaystyle\frac{1}{2}$ and $\displaystyle\frac{1}{1}$ gives us $\displaystyle\frac{1+1}{2+1}=\frac{2}{3}$. Now our list is 
+
+$$ \Biggl \{ \frac{0}{1}, \frac{1}{3}, \frac{1}{2}, \frac{2}{3}, \frac{1}{1} \Biggr \} $$
+
+Now we can make four more Farey Numbers. If we make them all, our list becomes
+
+$$ \Biggl \{ \frac{0}{1}, \frac{1}{4}, \frac{1}{3}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{2}{3}, \frac{3}{4}, \frac{1}{1} \Biggr \} $$
+
+### And so on...
+
+We can continue making new Farey numbers forever and we'll never make the same Farey number twice. Also we'll never make Farey numbers that are equivalent fractions. So, for example, since we've already made $\displaystyle\frac{1}{2}$ that means we'll never make $\displaystyle\frac{1}{2}$ again, and we'll also never make any of $\displaystyle\Biggl\{\frac{2}{4},\frac{3}{6},\frac{4}{8}, ... \Biggr\}$.
+
+## Linked List?
+
+Farey numbers remind me of linked lists. A linked list is sequence of elements, each one linked to the next. The first two elements are the begin and end of the list. 
+
+```{goat}
+
+     *----->*
+     
+   begin   end
+```
+
+If you have two elements of a linked list, you can make a new element between them. We have the begin and end of the list, so we can make another one between them. Our linked list now looks like this.
+
+```{goat}
+             .-.     
+     *----->|   +----->*
+             '-'      
+   begin              end
+```
+
+Now there are two places to insert into the list: between begin and the node we just inserted, and between the node we just inserted and end. That sentence there took a lot of words to describe those positions because the name for the node we just inserted is "the node we just inserted". That isn't going to scale to the rest of this conversation. We need a better name to make the sentence shorter. The element was between **b**egin and **e**nd, so we'll call it **be**.
+
+```{goat}
+             .-.     
+     *----->|   +----->*
+             '-'       
+     b       be        e
+```
+
+Now we can make two new elements. Inserting between b and be gives us **bee**. Inserting between **be** and **e** gives us **bee**. Now our list is
+
+```{goat}
+             .-.        .-.        .-.        
+     *----->|   +----->|   +----->|   +----->*
+             '-'        '-'        '-'       
+     b       bbe        be         bee       e
+```
+
+Now we can make four new elements. If we make them all, our list becomes
+
+```{goat}
+           .-.      .-.      .-.      .-.      .-.      .-.      .-.      
+     *--->|   +--->|   +--->|   +--->|   +--->|   +--->|   +--->|   +--->*
+           '-'      '-'      '-'      '-'      '-'      '-'      '-'     
+     b     bbbe     bbe     bbebe     be      bebee     bee      beee    e
+```
+
+## Squint Real Hard
+
+If we squint real hard, our strings of **b**s and **e**s map directly to the Farey numbers! The numerator of the Farey number is the number of e's in the string, and the denominator is the length of the string. 
+
+<div class="yep">
+
+$\displaystyle b$ has zero **e**s and its length is one so $\displaystyle b=\frac{0}{1}$
+
+$\displaystyle e$ has one **e** and its length is one so $\displaystyle e=\frac{1}{1}$
+
+$\displaystyle be$ has one **e** and its length is two so $\displaystyle be=\frac{1}{2}$
+
+$\displaystyle bbe$ has one **e** and its length is three so $\displaystyle bbe=\frac{1}{3}$
+
+...and so on, promise.
+
+</div>

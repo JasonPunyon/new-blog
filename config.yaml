@@ -76,7 +76,7 @@ params:
   clearReading: yes
   comment:
     disqus:
-      enable: yes
+      enable: no
       shortname: hugo-tranquilpeak-theme
     gitalk:
       enable: no
