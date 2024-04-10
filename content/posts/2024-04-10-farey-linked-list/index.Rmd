@@ -71,15 +71,17 @@ A linked list is sequence of elements, each one linked to the next. The first tw
 If you have two elements of a linked list, you can make a new element between them. We have the begin and end of the list, so we can make another one between them. Our linked list now looks like this.
 
 ```{goat}
+
              .-.     
      *----->|   +----->*
              '-'      
    begin              end
 ```
 
-Now there are two places to insert into the list: between begin and the node we just inserted, and between the node we just inserted and end. That sentence there took a lot of words to describe those positions because the name for the node we just inserted is "the node we just inserted". That isn't going to scale to the rest of this conversation. We need a better name to make the sentence shorter. The element was between **b**egin and **e**nd, so we'll call it **be**.
+We need a name for that node so we can talk about it. It was inserted between **b**egin and **e**nd, so we'll call it **be**.
 
 ```{goat}
+
              .-.     
      *----->|   +----->*
              '-'       
@@ -89,6 +91,7 @@ Now there are two places to insert into the list: between begin and the node we 
 Now we can make two new elements. Inserting between b and be gives us **bee**. Inserting between **be** and **e** gives us **bee**. Now our list is
 
 ```{goat}
+
              .-.        .-.        .-.        
      *----->|   +----->|   +----->|   +----->*
              '-'        '-'        '-'       
@@ -98,6 +101,7 @@ Now we can make two new elements. Inserting between b and be gives us **bee**. I
 Now we can make four new elements. If we make them all, our list becomes
 
 ```{goat}
+
            .-.      .-.      .-.      .-.      .-.      .-.      .-.      
      *--->|   +--->|   +--->|   +--->|   +--->|   +--->|   +--->|   +--->*
            '-'      '-'      '-'      '-'      '-'      '-'      '-'     
