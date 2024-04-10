@@ -88,7 +88,7 @@ We need a name for that node so we can talk about it. It was inserted between **
      b       be        e
 ```
 
-Now we can make two new elements. Inserting between b and be gives us **bee**. Inserting between **be** and **e** gives us **bee**. Now our list is
+Now we can make two new elements. Inserting between b and be gives us **bbe**. Inserting between **be** and **e** gives us **bee**. Now our list is
 
 ```{goat}
 
