@@ -129,3 +129,9 @@ $\displaystyle bee$ has two **e**s and its length is three so $\displaystyle bbe
 ...and so on (promise)
 
 </div>
+
+## Why is that interesting?
+
+If you use Farey numbers to name the elements of linked lists as they're inserted, the structure (and a good bit of the history) of the linked list is completely specified by those names. You can break all the links and reassemble the list by starting at the empty list and following the Farey number generation process. The first element you insert will always be the one called $\displaystyle\frac{1}{2}$, which will always make the $\displaystyle\frac{1}{3}$ and $\displaystyle\frac{2}{3}$ spots available for insert, and so on.
+
+The Farey numbers are a coordinate system for linked lists.
