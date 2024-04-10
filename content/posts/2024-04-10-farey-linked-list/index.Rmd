@@ -1,5 +1,5 @@
 ---
-title: Farey Linked List
+title: Farey Numbers and Linked Lists
 date: '2024-04-10'
 slug: farey-linked-list
 ---
@@ -10,8 +10,8 @@ The Farey Numbers are a good coordinate system for linked lists.
 
 ```{r setup, echo=FALSE}
 knitr::knit_engines$set(goat = function(options) {
-  code <- paste(options$code)
-  system2("goat", "-sds \"#000000\"", input = code, stdout = TRUE)
+        code <- paste(options$code)
+        system2("goat", "-sds \"#000000\"", input = code, stdout = TRUE)
 })
 ```
 
@@ -32,7 +32,7 @@ body {
 }
 ```
 
-## What are Farey numbers?
+## Farey Numbers
 
 Farey numbers are fractions. The first two Farey numbers are $\displaystyle\frac{0}{1}$ and $\displaystyle\frac{1}{1}$. If you have two Farey numbers $\displaystyle\frac{a}{c}$ and $\displaystyle\frac{b}{d}$, you can make a new Farey number $\displaystyle\frac{e}{f}$ by summing their numerators and denominators.
 
@@ -41,8 +41,6 @@ $$ \displaystyle\frac{e}{f} = \frac{a+b}{c+d} $$
 The new Farey number will always be strictly between the first two, so if $\displaystyle\frac{b}{d}$ were the larger of the two then
 
 $$ \frac{a}{c} < \space\frac{a+b}{c+d}\space< \frac{b}{d} $$
-
-### More Farey numbers
 
 We have two Farey numbers, so we can make another one between them. According to the rule, that number is $\displaystyle\frac{0 + 1}{1 + 1}=\frac{1}{2}$ . Our list of Farey numbers is now
 $$
@@ -57,13 +55,11 @@ Now we can make four more Farey Numbers. If we make them all, our list becomes
 
 $$ \Biggl \{ \frac{0}{1}, \frac{1}{4}, \frac{1}{3}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{2}{3}, \frac{3}{4}, \frac{1}{1} \Biggr \} $$
 
-### And so on...
-
 We can continue making new Farey numbers forever and we'll never make the same Farey number twice. Also we'll never make Farey numbers that are equivalent fractions. So, for example, since we've already made $\displaystyle\frac{1}{2}$ that means we'll never make $\displaystyle\frac{1}{2}$ again, and we'll also never make any of $\displaystyle\Biggl\{\frac{2}{4},\frac{3}{6},\frac{4}{8}, ... \Biggr\}$.
 
-## Linked List?
+## Linked Lists
 
-Farey numbers remind me of linked lists. A linked list is sequence of elements, each one linked to the next. The first two elements are the begin and end of the list. 
+A linked list is sequence of elements, each one linked to the next. The first two elements are the begin and end of the list. 
 
 ```{goat}
 

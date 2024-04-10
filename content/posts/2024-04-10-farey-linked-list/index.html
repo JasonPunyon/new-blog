@@ -1,5 +1,5 @@
 ---
-title: Farey Linked List
+title: Farey Numbers and Linked Lists
 date: '2024-04-10'
 slug: farey-linked-list
 ---
@@ -25,14 +25,12 @@ body {
   text-align:center;
 }
 </style>
-<div id="what-are-farey-numbers" class="section level2">
-<h2>What are Farey numbers?</h2>
+<div id="farey-numbers" class="section level2">
+<h2>Farey Numbers</h2>
 <p>Farey numbers are fractions. The first two Farey numbers are <span class="math inline">\(\displaystyle\frac{0}{1}\)</span> and <span class="math inline">\(\displaystyle\frac{1}{1}\)</span>. If you have two Farey numbers <span class="math inline">\(\displaystyle\frac{a}{c}\)</span> and <span class="math inline">\(\displaystyle\frac{b}{d}\)</span>, you can make a new Farey number <span class="math inline">\(\displaystyle\frac{e}{f}\)</span> by summing their numerators and denominators.</p>
 <p><span class="math display">\[ \displaystyle\frac{e}{f} = \frac{a+b}{c+d} \]</span></p>
 <p>The new Farey number will always be strictly between the first two, so if <span class="math inline">\(\displaystyle\frac{b}{d}\)</span> were the larger of the two then</p>
 <p><span class="math display">\[ \frac{a}{c} &lt; \space\frac{a+b}{c+d}\space&lt; \frac{b}{d} \]</span></p>
-<div id="more-farey-numbers" class="section level3">
-<h3>More Farey numbers</h3>
 <p>We have two Farey numbers, so we can make another one between them. According to the rule, that number is <span class="math inline">\(\displaystyle\frac{0 + 1}{1 + 1}=\frac{1}{2}\)</span> . Our list of Farey numbers is now
 <span class="math display">\[
 \Biggl \{ \frac{0}{1}, \frac{1}{2}, \frac{1}{1} \Biggr \}
@@ -41,15 +39,11 @@ body {
 <p><span class="math display">\[ \Biggl \{ \frac{0}{1}, \frac{1}{3}, \frac{1}{2}, \frac{2}{3}, \frac{1}{1} \Biggr \} \]</span></p>
 <p>Now we can make four more Farey Numbers. If we make them all, our list becomes</p>
 <p><span class="math display">\[ \Biggl \{ \frac{0}{1}, \frac{1}{4}, \frac{1}{3}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{2}{3}, \frac{3}{4}, \frac{1}{1} \Biggr \} \]</span></p>
-</div>
-<div id="and-so-on" class="section level3">
-<h3>And so on…</h3>
 <p>We can continue making new Farey numbers forever and we’ll never make the same Farey number twice. Also we’ll never make Farey numbers that are equivalent fractions. So, for example, since we’ve already made <span class="math inline">\(\displaystyle\frac{1}{2}\)</span> that means we’ll never make <span class="math inline">\(\displaystyle\frac{1}{2}\)</span> again, and we’ll also never make any of <span class="math inline">\(\displaystyle\Biggl\{\frac{2}{4},\frac{3}{6},\frac{4}{8}, ... \Biggr\}\)</span>.</p>
 </div>
-</div>
-<div id="linked-list" class="section level2">
-<h2>Linked List?</h2>
-<p>Farey numbers remind me of linked lists. A linked list is sequence of elements, each one linked to the next. The first two elements are the begin and end of the list.</p>
+<div id="linked-lists" class="section level2">
+<h2>Linked Lists</h2>
+<p>A linked list is sequence of elements, each one linked to the next. The first two elements are the begin and end of the list.</p>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="73" width="120" font-family="Menlo,Lucida Console,monospace">
 <style type="text/css">svg {   color: #000000;}@media (prefers-color-scheme: dark) {   svg {      color: #000000;   }}</style>
 <g transform='translate(8,16)'><path d='M 40,16 L 88,16' fill='none' stroke='currentColor'></path><polygon points='88.000000,16.000000 76.000000,10.400000 76.000000,21.600000' fill='currentColor' transform='rotate(0.000000, 88.000000, 16.000000)'></polygon><circle cx='40' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle><circle cx='96' cy='16' r='6' stroke='currentColor' fill='currentColor'></circle>
