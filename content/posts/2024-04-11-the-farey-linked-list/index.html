@@ -5,7 +5,6 @@ slug: farey-linked-list
 
 ---
 
-<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
 
 <p>In my <a href="/blog/2024/04/10/farey-numbers-and-linked-lists">last post</a> I talked about using Farey numbers as coordinates for linked list elements. Let’s actually do it.</p>
@@ -34,7 +33,7 @@ body {
     display: block;
 }
 </style>
-<script type="text/javascript">
+<script>
 var cy = null;
 let graphit = function(element, destination, label="data(id)") {
     cy = cytoscape({
@@ -86,6 +85,7 @@ let graphit = function(element, destination, label="data(id)") {
     } while(current)
     
     cy.layout({ name: "grid", rows: 1 }).run();
+    window.addEventListener("resize", () => graphit(element, destination, label));
     /*cy.on('tap', 'edge', function(evt) {
         var node = evt.target;
         console.log(node);
@@ -113,7 +113,7 @@ let end = {
 
 // &quot;link!&quot; – navi
 begin.next = end;</code></pre>
-<script type="text/javascript">
+<script>
 // make one node
 let begin = {
     next: undefined
@@ -131,7 +131,7 @@ begin.next = end;
 <div id="begin-end" class="cy">
 
 </div>
-<script type="text/javascript">
+<script>
 begin.numerator = 0;
 begin.denominator = 1;
 begin.next.numerator = 1;
@@ -145,7 +145,7 @@ graphit(begin, "begin-end", "")
         next: undefined
     }
 });</code></pre>
-<script type="text/javascript">
+<script>
 let makeList = () => ({
     next: {
         next: undefined
@@ -167,7 +167,7 @@ let makeList = () => ({
 });
 
 begin = makeList();</code></pre>
-<script type="text/javascript">
+<script>
 makeList = () => ({
     numerator: 0,
     denominator: 1,
@@ -183,7 +183,7 @@ begin = makeList();
 <div id="with-farey-numbers" class="cy">
 
 </div>
-<script type="text/javascript">
+<script>
 graphit(begin, "with-farey-numbers", "data(id)");
 </script>
 <p>We’d like to insert into the list. This function takes an element of the list and inserts a new element after it.</p>
@@ -211,7 +211,7 @@ graphit(begin, "with-farey-numbers", "data(id)");
     // return the new element
     return newEl;
 }</code></pre>
-<script type="text/javascript">
+<script>
 let insert = function(element) {
     //my kingdom for a type system
     if (!element || !element.next) {
@@ -239,27 +239,27 @@ let insert = function(element) {
 </script>
 <p>If we insert an element after begin…</p>
 <pre class="js"><code>let half = insert(begin);</code></pre>
-<script type="text/javascript">
+<script>
 let half = insert(begin);
 </script>
 <p>We get</p>
 <div id="with-half" class="cy">
 
 </div>
-<script type="text/javascript">
+<script>
 graphit(begin, "with-half");
 </script>
 <p>We can do it again…</p>
 <pre class="js"><code>let third = insert(begin);
 let twothirds = insert(half);</code></pre>
-<script type="text/javascript">
+<script>
 let third = insert(begin);
 let twothirds = insert(half);
 </script>
 <div id="with-third" class="cy">
 
 </div>
-<script type="text/javascript">
+<script>
 graphit(begin, "with-third")
 </script>
 </div>
