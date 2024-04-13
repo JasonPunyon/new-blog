@@ -1,7 +1,7 @@
 ---
 title: Farey Numbers and Linked Lists
 date: '2024-04-10'
-slug: farey-linked-list
+slug: farey-numbers-and-linked-lists
 ---
 
 The Farey Numbers are a neat coordinate system for linked lists.
