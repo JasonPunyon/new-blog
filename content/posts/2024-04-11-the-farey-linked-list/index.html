@@ -10,6 +10,7 @@ slug: farey-linked-list
 <p>In my <a href="/blog/2024/04/10/farey-numbers-and-linked-lists">last post</a> I talked about using Farey numbers as coordinates for linked list elements. Let’s actually do it.</p>
 <!--more-->
 <script src=" https://cdn.jsdelivr.net/npm/cytoscape@3.28.1/dist/cytoscape.min.js "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/7.8.1/rxjs.umd.min.js" integrity="sha512-D9LDs8YUUVa4V9Gl4Zb+xqRAc7RCzooR3+zzebgK2RMu/KU+dh90pbjEEMzPiSyRSGbSp9j1pZnrO4joGa5WEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style type="text/css">
 p > code {
     padding: 0 5px;
@@ -29,14 +30,13 @@ body {
 }
 
 .cy {
-    height: 150px;
+    height: 9em;
     display: block;
 }
 </style>
 <script>
-var cy = null;
-let graphit = function(element, destination, label="data(id)") {
-    cy = cytoscape({
+let graphit = function(element, destination, label='data(id)', fitpadding=30) {
+    let cy = cytoscape({
         container: document.getElementById(destination), // container to render in
         elements: [ ],
         style: [ // the stylesheet for the graph
@@ -47,14 +47,17 @@ let graphit = function(element, destination, label="data(id)") {
                     'label': label,
                     'text-valign': 'bottom',
                     'text-margin-y': '1em',
+                    'text-wrap': 'wrap',
                     'font-family': 'Merriweather, serif',
-                    'font-size': '1.1em'
+                    'width': "2em",
+                    'height': "2em",
+                    'font-size': '1.5em'
                 }
             },
             {
                 selector: 'edge',
                 style: {
-                    'width': 7,
+                    'width': ".5em",
                     'line-color': '#ccc',
                     'target-arrow-color': '#ccc',
                     'target-arrow-shape': 'triangle',
@@ -62,163 +65,97 @@ let graphit = function(element, destination, label="data(id)") {
                 }
             }
         ],
-        panningEnabled: false,
+        //panningEnabled: false,
+        //userPanningEnabled: false,
         boxSelectionEnabled: false,
         autoungrabify: true,
         autounselectify: true
     });
 
-    let id = (element) => `${element.numerator}/${element.denominator}`;
+    let focus;
+
+    let doLayout = function() {
+        cy.nodes().sort(function(n1, n2) {
+            var l = n1.data('sort').numerator * n2.data('sort').denominator;
+            var r = n2.data('sort').numerator * n1.data('sort').denominator;
+            return (l - r) < 0n ? -1 : 1;
+        }).layout({ name: "grid", rows: 1, avoidOverlapPadding: 200 }).run();
+        cy.fit(focus, fitpadding);
+    }
+
+    cy.on('tap', 'edge', function(evt) {
+        cy.remove(evt.target);
+
+        var lnode = evt.target._private.data.leftnode
+        var newel = insert(lnode);
+
+        var newnode = cy.add({ group: 'nodes', data: { id: id(newel), sort: newel }});
+        focus = newnode;
+        cy.add({ 
+            group: 'edges', 
+            data: { 
+                id: `${id(evt.target._private.data.leftnode)} -> ${id(newel)}`,
+                source: id(evt.target._private.data.leftnode),
+                target: id(newel),
+                leftnode: evt.target._private.data.leftnode
+            }});
+        cy.add({ 
+            group: 'edges', 
+            data: { 
+                id: `${id(newel)} -> ${id(newel.next)}`,
+                source: id(newel),
+                target: id(newel.next),
+                leftnode: newel
+            }});
+
+        doLayout();
+        //cy.center(newnode);
+    })
+
+    let id = (element) => `${element.numerator}\n${element.denominator}`;
 
     let last = undefined;
     let current = element;
     do {
-        cy.add({ group: 'nodes', data: { id: id(current) }});
+        cy.add({ group: 'nodes', data: { id: id(current), sort: current }});
 
         if (last) {
             cy.add({
                 group: 'edges', 
-                data: { id: `${id(last)} -> ${id(current)}`, source: id(last), target: id(current) }})
+                data: { 
+                    id: `${id(last)} -> ${id(current)}`, 
+                    source: id(last), 
+                    target: id(current),
+                    leftnode: last
+                }
+            })
         }
         last = current;
         current = current.next;
     } while(current)
-    
-    cy.layout({ name: "grid", rows: 1 }).run();
-    window.addEventListener("resize", () => graphit(element, destination, label));
-    /*cy.on('tap', 'edge', function(evt) {
-        var node = evt.target;
-        console.log(node);
-        cy.remove(node);
-        cy.add({ group: "nodes", data: { id: node.source }})
-        //cy.layout({ name: "grid", rows: 1, animate: true });
 
-        //graphit(element, destination, label);
-    });*/
-}
-</script>
-<p>In my <a href="/blog/2024/04/10/farey-numbers-and-linked-lists">last post</a> I talked about using Farey numbers as coordinates for linked list elements. Let’s actually do it.</p>
-<div id="start-with-a-linked-list" class="section level2">
-<h2>Start with a linked list</h2>
-<p>A linked list is a sequence of elements, each one linked to the next. In javascript we might set up an empty linked list like this…</p>
-<pre class="js"><code>// make one node
-let begin = {
-    next: undefined
+    focus = cy.elements();
+    doLayout();
+    rxjs.fromEvent(window, "resize").pipe(rxjs.debounceTime(200)).subscribe(doLayout);
 }
 
-// make another node
-let end = {
-    next: undefined
-}
-
-// &quot;link!&quot; – navi
-begin.next = end;</code></pre>
-<script>
-// make one node
-let begin = {
-    next: undefined
-}
-
-// make another node
-let end = {
-    next: undefined
-}
-
-// "link!" – navi
-begin.next = end;
-</script>
-<p>And visualize it like this…</p>
-<div id="begin-end" class="cy">
-
-</div>
-<script>
-begin.numerator = 0;
-begin.denominator = 1;
-begin.next.numerator = 1;
-begin.next.denominator = 1;
-
-graphit(begin, "begin-end", "")
-</script>
-<p>We can terse up the code and give it a name.</p>
-<pre class="js"><code>let makeList = () =&gt; ({
-    next: {
-        next: undefined
-    }
-});</code></pre>
-<script>
 let makeList = () => ({
+    numerator: 0n,
+    denominator: 1n,
     next: {
-        next: undefined
-    }
-});
-</script>
-</div>
-<div id="add-a-pinch-of-farey-dust" class="section level2">
-<h2>Add a pinch of Farey dust</h2>
-<p>Now we’ll add the Farey numbers. <code>begin</code> is always <span class="math inline">\(\displaystyle\frac{0}{1}\)</span>, and <code>end</code> is always <span class="math inline">\(\displaystyle\frac{1}{1}\)</span></p>
-<pre class="js"><code>makeList = () =&gt; ({
-    numerator: 0,
-    denominator: 1,
-    next: {
-        numerator: 1,
-        denominator: 1,
+        numerator: 1n,
+        denominator: 1n,
         next: undefined
     }
 });
 
-begin = makeList();</code></pre>
-<script>
-makeList = () => ({
-    numerator: 0,
-    denominator: 1,
-    next: {
-        numerator: 1,
-        denominator: 1,
-        next: undefined
-    }
-});
-
-begin = makeList();
-</script>
-<div id="with-farey-numbers" class="cy">
-
-</div>
-<script>
-graphit(begin, "with-farey-numbers", "data(id)");
-</script>
-<p>We’d like to insert into the list. This function takes an element of the list and inserts a new element after it.</p>
-<pre class="js"><code>let insert = function(element) {
-    //my kingdom for a type system
-    if (!element || !element.next) {
-        throw &quot;:(&quot;;
-    }
-
-    ///make the new element
-    let newEl = {
-        // it needs a Farey number
-        // to make a new Farey number from two existing Farey numbers, 
-        // you sum their numerators and denominators.
-        numerator: element.numerator + element.next.numerator,
-        denominator: element.denominator + element.next.denominator,
-
-        // it points to what element currently points to.
-        next: element.next
-    };
-    
-    //insert the new element into the list by making element point to it.
-    element.next = newEl;
-
-    // return the new element
-    return newEl;
-}</code></pre>
-<script>
 let insert = function(element) {
-    //my kingdom for a type system
+    // my kingdom for a type system
     if (!element || !element.next) {
         throw ":(";
     }
 
-    ///make the new element
+    // make the new element
     let newEl = {
         // it needs a Farey number
         // to make a new Farey number from two existing Farey numbers, 
@@ -230,36 +167,19 @@ let insert = function(element) {
         next: element.next
     };
     
-    //insert the new element into the list by making element point to it.
+    // insert the new element into the list by making element point to it.
     element.next = newEl;
 
     // return the new element
     return newEl;
 }
+
+let list = makeList();
 </script>
-<p>If we insert an element after begin…</p>
-<pre class="js"><code>let half = insert(begin);</code></pre>
-<script>
-let half = insert(begin);
-</script>
-<p>We get</p>
-<div id="with-half" class="cy">
+<p>In my <a href="/blog/2024/04/10/farey-numbers-and-linked-lists">last post</a> I talked about using Farey numbers as coordinates for linked list elements. Here’s what that looks like. Click the link in the list, and you can insert a new node.</p>
+<div id="the-list" class="cy">
 
 </div>
 <script>
-graphit(begin, "with-half");
+graphit(list, "the-list");
 </script>
-<p>We can do it again…</p>
-<pre class="js"><code>let third = insert(begin);
-let twothirds = insert(half);</code></pre>
-<script>
-let third = insert(begin);
-let twothirds = insert(half);
-</script>
-<div id="with-third" class="cy">
-
-</div>
-<script>
-graphit(begin, "with-third")
-</script>
-</div>
