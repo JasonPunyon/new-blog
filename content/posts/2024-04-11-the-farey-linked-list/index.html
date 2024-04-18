@@ -30,11 +30,19 @@ body {
 }
 
 .cy {
-    height: 9em;
+    height: 8em;
     display: block;
 }
 </style>
 <script>
+let newId = function(left, right) {
+    return {
+        numerator: left.numerator + right.numerator,
+        denominator: left.denominator + right.denominator
+    }
+}
+let id = (element) => `${element.numerator}\n${element.denominator}`;
+
 let graphit = function(element, destination, label='data(id)', fitpadding=30) {
     let cy = cytoscape({
         container: document.getElementById(destination), // container to render in
@@ -74,45 +82,51 @@ let graphit = function(element, destination, label='data(id)', fitpadding=30) {
 
     let focus;
 
-    let doLayout = function() {
+    let doLayout = function(animate = false, fit = false) {
+        //cy.clearQueue();
         cy.nodes().sort(function(n1, n2) {
             var l = n1.data('sort').numerator * n2.data('sort').denominator;
             var r = n2.data('sort').numerator * n1.data('sort').denominator;
             return (l - r) < 0n ? -1 : 1;
-        }).layout({ name: "grid", rows: 1, avoidOverlapPadding: 200 }).run();
-        cy.fit(focus, fitpadding);
+        }).layout({ 
+            name: "grid", 
+            rows: 1,
+            avoidOverlapPadding: 200, 
+            fit: fit, 
+            animate: animate, 
+            animationDuration: 200,
+            center: { eles: [ focus ] } 
+        }).run();
+        cy.animate({ fit: { eles: focus, padding: fitpadding, duration: 200 } }) 
     }
 
-    cy.on('tap', 'edge', function(evt) {
+    cy.on('tap', 'edge', function(evt, pos) {
         cy.remove(evt.target);
 
         var lnode = evt.target._private.data.leftnode
         var newel = insert(lnode);
 
-        var newnode = cy.add({ group: 'nodes', data: { id: id(newel), sort: newel }});
+        var newnode = cy.add({ group: 'nodes', data: { id: id(newel), sort: newel }, position: pos ?? evt.position });
         focus = newnode;
         cy.add({ 
             group: 'edges', 
             data: { 
-                id: `${id(evt.target._private.data.leftnode)} -> ${id(newel)}`,
-                source: id(evt.target._private.data.leftnode),
+                id: id(newId(lnode, newel)),
+                source: id(lnode),
                 target: id(newel),
-                leftnode: evt.target._private.data.leftnode
+                leftnode: lnode
             }});
         cy.add({ 
             group: 'edges', 
             data: { 
-                id: `${id(newel)} -> ${id(newel.next)}`,
+                id: id(newId(newel, newel.next)),
                 source: id(newel),
                 target: id(newel.next),
                 leftnode: newel
             }});
 
-        doLayout();
-        //cy.center(newnode);
+        doLayout(true, false);
     })
-
-    let id = (element) => `${element.numerator}\n${element.denominator}`;
 
     let last = undefined;
     let current = element;
@@ -123,7 +137,7 @@ let graphit = function(element, destination, label='data(id)', fitpadding=30) {
             cy.add({
                 group: 'edges', 
                 data: { 
-                    id: `${id(last)} -> ${id(current)}`, 
+                    id: id(newId(last, current)), 
                     source: id(last), 
                     target: id(current),
                     leftnode: last
@@ -135,8 +149,9 @@ let graphit = function(element, destination, label='data(id)', fitpadding=30) {
     } while(current)
 
     focus = cy.elements();
-    doLayout();
+    doLayout(false, true);
     rxjs.fromEvent(window, "resize").pipe(rxjs.debounceTime(200)).subscribe(doLayout);
+    return cy;
 }
 
 let makeList = () => ({
@@ -176,10 +191,10 @@ let insert = function(element) {
 
 let list = makeList();
 </script>
-<p>In my <a href="/blog/2024/04/10/farey-numbers-and-linked-lists">last post</a> I talked about using Farey numbers as coordinates for linked list elements. Here’s what that looks like. Click the link in the list, and you can insert a new node.</p>
+<p>In my <a href="/blog/2024/04/10/farey-numbers-and-linked-lists">last post</a> I talked about using Farey numbers as coordinates for linked list elements. Here’s what that looks like. Click a link to insert a new element into the list.</p>
 <div id="the-list" class="cy">
 
 </div>
 <script>
-graphit(list, "the-list");
+lecy = graphit(list, "the-list");
 </script>
