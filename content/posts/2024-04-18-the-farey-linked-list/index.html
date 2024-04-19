@@ -97,7 +97,7 @@ let graphit = function(element, destination, label='data(id)', fitpadding=30) {
             animationDuration: 200,
             center: { eles: [ focus ] } 
         }).run();
-        cy.animate({ fit: { eles: focus, padding: fitpadding, duration: 200 } }) 
+        cy.animate({ fit: { eles: focus, padding: fitpadding, duration: 300 } }) 
     }
 
     cy.on('tap', 'edge', function(evt, pos) {
@@ -106,8 +106,25 @@ let graphit = function(element, destination, label='data(id)', fitpadding=30) {
         var lnode = evt.target._private.data.leftnode
         var newel = insert(lnode);
 
-        var newnode = cy.add({ group: 'nodes', data: { id: id(newel), sort: newel }, position: pos ?? evt.position });
+        var newnode = cy.add({ 
+            group: 'nodes', 
+            data: { id: id(newel), sort: newel }, 
+            position: pos ?? evt.position,
+        });
+        
+        if (focus && focus.length == 1) {
+            focus.animate({
+                style: { 'background-color': '#5d686f' },
+                duration: 50
+            });
+        }
+
         focus = newnode;
+        newnode.animate(({
+            style: { 'background-color': '#007FFF'},
+            duration: 50
+        }));
+
         cy.add({ 
             group: 'edges', 
             data: { 
@@ -198,3 +215,83 @@ let list = makeList();
 <script>
 lecy = graphit(list, "the-list");
 </script>
+<div id="rationalizing-the-irrational" class="section level3">
+<h3>Rationalizing the Irrational</h3>
+<p>To find rational approximations of an irrational number, repeatedly insert into the list where that number should be. Let’s approximate <span class="math inline">\(\displaystyle\pi\)</span>. Wait a minute though, the Farey Numbers only run from <span class="math inline">\(\displaystyle0-1,\)</span> and <span class="math inline">\(\displaystyle\pi &gt; 1.\)</span> So what we’ll actually do is approximate <span class="math inline">\(\displaystyle\frac{1}{\pi},\)</span> and take the reciprocal of the answer we get. The display will update each time we get a new best approximation.</p>
+<div id="pi" class="cy">
+
+</div>
+<div class="center">
+<span class="math inline">\(\displaystyle\pi =\)</span><span id="pi-approximation">0</span><br /><button class="approx-pi btn btn--default">Approximate <span class="math inline">\(\displaystyle\pi\)</span></button>
+</div>
+<script>
+let makeApproximationHandler = function(toApproximaten, toApproximate, left, right, graph, button, output) {
+    let bestApprox = 100;
+    let bestError = 100;
+    let count = 1000000;
+    let handler = (event) => {
+        button.removeEventListener("click", handler);
+        approximationTimeout = setInterval(function() {
+            newEl = insert(left);
+            approx = 10000000000000000/Number(newEl.numerator*10000000000000000n / newEl.denominator);
+
+            if (newEl.denominator > Number(toApproximaten * newEl.numerator)/10000000000000000) 
+            {
+                left = newEl;
+            } 
+            else if (newEl.denominator < Number(toApproximaten * newEl.numerator)/10000000000000000) 
+            {
+                right = newEl;
+            }
+            else 
+            {
+                clearTimeout(approximationTimeout);
+            }
+
+            le_element = graph.getElementById(id(newEl));
+            le_element.emit('tap', le_element.midpoint());
+            if (count-- == 0) {
+                clearTimeout(approximationTimeout);
+            }
+            
+            var error = Math.abs(toApproximate - approx);
+            if (error < bestError) {
+                bestError = error;
+                bestApprox = approx;
+                output.innerText = bestApprox;
+            }
+        }, 600);
+    }
+    button.addEventListener("click", handler);
+}
+
+var piList = makeList();
+
+pigraph = graphit(makeList(), "pi");
+var left = piList;
+var right = piList.next;
+
+var pin = BigInt(Math.PI * 10000000000000000); 
+
+makeApproximationHandler(pin, Math.PI, left, right, pigraph, document.querySelector("button.approx-pi"), document.getElementById("pi-approximation"))
+</script>
+<p>That might take awhile, let’s do something else in the meantime. Let’s do <span class="math inline">\(\displaystyle\phi\)</span>.</p>
+<div id="phi" class="cy">
+
+</div>
+<div class="center">
+<span class="math inline">\(\displaystyle\phi =\)</span><span id="phi-approximation">0</span><br /><button class="approx-phi btn btn--default">Approximate <span class="math inline">\(\displaystyle\phi\)</span></button>
+</div>
+<script>
+let phiList = makeList();
+let phigraph = graphit(makeList(), "phi");
+let phileft = phiList;
+let phiright = phiList.next;
+
+let phi = (1 + Math.sqrt(5)) / 2;
+let phin = BigInt(phi * 10000000000000000);
+
+makeApproximationHandler(phin, phi, phileft, phiright, phigraph, document.querySelector("button.approx-phi"), document.getElementById("phi-approximation"));
+</script>
+<p>Watch both closely. <span class="math inline">\(\displaystyle\pi\)</span> takes long runs in the same direction, while <span class="math inline">\(\displaystyle\phi\)</span> alternates directions every step. Alternating the direction the way <span class="math inline">\(\displaystyle\phi\)</span> does turns out to be the fastest way to make the numerator and denominator of the Farey Numbers grow. This is one manifestation of <span class="math inline">\(\displaystyle\phi&#39;s\)</span> reputation as “The Most Irrational Number”.</p>
+</div>
