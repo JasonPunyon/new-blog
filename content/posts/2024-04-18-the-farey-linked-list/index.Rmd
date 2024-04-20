@@ -221,10 +221,9 @@ lecy = graphit(list, "the-list");
 
 ### Rationalizing the Irrational
 
-To find rational approximations of an irrational number, repeatedly insert into the list where that number should be. Let's approximate $\displaystyle\pi$. Wait a minute though, the Farey Numbers only run from $\displaystyle0-1,$ and $\displaystyle\pi > 1.$ So what we'll actually do is approximate $\displaystyle\frac{1}{\pi},$ and take the reciprocal of the answer we get. The display will update each time we get a new best approximation.
+We can use the Farey Linked List to find rational approximations of irrational numbers between zero and one. If we want to approximate a number greater than one, first we approximate the reciprocal of that number, then we take the reciprocal of that approximation. Let's do $\displaystyle\pi.$ $\displaystyle\pi$ is greater than one, so first we take its reciprocal which is ~$0.318$. The empty Farey Linked List has one edge that spans $\displaystyle0-1.$ $0.318$ is in that range, so we'll insert a node there. Now we have two edges. The first edge spans $0-\frac{1}{2}$, and the second edge spans $\frac{1}{2}-1.$ $0.318$ is in the first range, so we insert there. We can continue inserting until our approximation is good enough. Not every insertion we do will give us a better approximation immediately, but it will take us in the correct direction. The process looks like this (click the approximate button below).
 
 <div id="pi" class="cy"></div>
-
 <div class="center">$\displaystyle\pi =$<span id="pi-approximation">0</span><br /><button class="approx-pi btn btn--default">Approximate $\displaystyle\pi$</button></div>
 
 ```{js, echo=FALSE}
@@ -268,21 +267,20 @@ let makeApproximationHandler = function(toApproximaten, toApproximate, left, rig
     button.addEventListener("click", handler);
 }
 
-var piList = makeList();
+let piList = makeList();
 
 pigraph = graphit(makeList(), "pi");
-var left = piList;
-var right = piList.next;
+let pileft = piList;
+let piright = piList.next;
 
-var pin = BigInt(Math.PI * 10000000000000000); 
+let pin = BigInt(Math.PI * 10000000000000000); 
 
-makeApproximationHandler(pin, Math.PI, left, right, pigraph, document.querySelector("button.approx-pi"), document.getElementById("pi-approximation"))
+makeApproximationHandler(pin, Math.PI, pileft, piright, pigraph, document.querySelector("button.approx-pi"), document.getElementById("pi-approximation"))
 ```
 
-That might take awhile, let's do something else in the meantime. Let's do $\displaystyle\phi$.
+That might take awhile, let's do something else in the meantime. Here's $\displaystyle\phi.$
 
 <div id="phi" class="cy"></div>
-
 <div class="center">$\displaystyle\phi =$<span id="phi-approximation">0</span><br /><button class="approx-phi btn btn--default">Approximate $\displaystyle\phi$</button></div>
 
 ```{js, echo=FALSE}
@@ -298,3 +296,4 @@ makeApproximationHandler(phin, phi, phileft, phiright, phigraph, document.queryS
 ```
 
 Watch both closely. $\displaystyle\pi$ takes long runs in the same direction, while $\displaystyle\phi$ alternates directions every step. Alternating the direction the way $\displaystyle\phi$ does turns out to be the fastest way to make the numerator and denominator of the Farey Numbers grow. This is one manifestation of $\displaystyle\phi's$ reputation as "The Most Irrational Number".
+

@@ -217,7 +217,7 @@ lecy = graphit(list, "the-list");
 </script>
 <div id="rationalizing-the-irrational" class="section level3">
 <h3>Rationalizing the Irrational</h3>
-<p>To find rational approximations of an irrational number, repeatedly insert into the list where that number should be. Let’s approximate <span class="math inline">\(\displaystyle\pi\)</span>. Wait a minute though, the Farey Numbers only run from <span class="math inline">\(\displaystyle0-1,\)</span> and <span class="math inline">\(\displaystyle\pi &gt; 1.\)</span> So what we’ll actually do is approximate <span class="math inline">\(\displaystyle\frac{1}{\pi},\)</span> and take the reciprocal of the answer we get. The display will update each time we get a new best approximation.</p>
+<p>We can use the Farey Linked List to find rational approximations of irrational numbers between zero and one. If we want to approximate a number greater than one, first we approximate the reciprocal of that number, then we take the reciprocal of that approximation. Let’s do <span class="math inline">\(\displaystyle\pi.\)</span> <span class="math inline">\(\displaystyle\pi\)</span> is greater than one, so first we take its reciprocal which is ~<span class="math inline">\(0.318\)</span>. The empty Farey Linked List has one edge that spans <span class="math inline">\(\displaystyle0-1.\)</span> <span class="math inline">\(0.318\)</span> is in that range, so we’ll insert a node there. Now we have two edges. The first edge spans <span class="math inline">\(0-\frac{1}{2}\)</span>, and the second edge spans <span class="math inline">\(\frac{1}{2}-1.\)</span> <span class="math inline">\(0.318\)</span> is in the first range, so we insert there. We can continue inserting until our approximation is good enough. Not every insertion we do will give us a better approximation immediately, but it will take us in the correct direction. The process looks like this (click the approximate button below).</p>
 <div id="pi" class="cy">
 
 </div>
@@ -265,17 +265,17 @@ let makeApproximationHandler = function(toApproximaten, toApproximate, left, rig
     button.addEventListener("click", handler);
 }
 
-var piList = makeList();
+let piList = makeList();
 
 pigraph = graphit(makeList(), "pi");
-var left = piList;
-var right = piList.next;
+let pileft = piList;
+let piright = piList.next;
 
-var pin = BigInt(Math.PI * 10000000000000000); 
+let pin = BigInt(Math.PI * 10000000000000000); 
 
-makeApproximationHandler(pin, Math.PI, left, right, pigraph, document.querySelector("button.approx-pi"), document.getElementById("pi-approximation"))
+makeApproximationHandler(pin, Math.PI, pileft, piright, pigraph, document.querySelector("button.approx-pi"), document.getElementById("pi-approximation"))
 </script>
-<p>That might take awhile, let’s do something else in the meantime. Let’s do <span class="math inline">\(\displaystyle\phi\)</span>.</p>
+<p>That might take awhile, let’s do something else in the meantime. Here’s <span class="math inline">\(\displaystyle\phi.\)</span></p>
 <div id="phi" class="cy">
 
 </div>
